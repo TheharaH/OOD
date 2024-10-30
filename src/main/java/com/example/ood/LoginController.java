@@ -61,15 +61,18 @@ public class LoginController {
     private boolean validateLogin(String username, String password) {
         String csvFile = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
         String line;
-        boolean isValid = false;
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
                 String[] credentials = line.split(",");
-                if (credentials.length == 2) {
-                    if (credentials[0].equals(username) && credentials[1].equals(password)) {
-                        isValid = true;
-                        break;
+                // Check if the line has at least 2 elements for username and password
+                if (credentials.length >= 2) {
+                    String csvUsername = credentials[0].trim();
+                    String csvPassword = credentials[1].trim();
+
+                    // Validate username and password
+                    if (csvUsername.equals(username) && csvPassword.equals(password)) {
+                        return true; // Successful login
                     }
                 }
             }
@@ -77,6 +80,6 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        return isValid;
+        return false; // Login failed
     }
 }

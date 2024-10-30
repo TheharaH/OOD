@@ -135,8 +135,27 @@ public class HelloController {
     }
 
     @FXML
-    private void handleSignup() {
-        // Handle sign up action here (you can load another FXML for sign-up)
+    public void handleSignup(ActionEvent event) {
+        try {
+            // Load the AHD.fxml file
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
+            Parent root = fxmlLoader.load();
+
+            // Create a new scene with the loaded root and set it to the stage
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+
+            // Set the controller for the loaded FXML to be AHDController
+            SignUpController ahdController = fxmlLoader.getController();
+
+            // Optionally, you can pass any data to the AHDController using its public methods
+
+            // Show the stage
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
