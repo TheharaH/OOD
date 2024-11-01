@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class LoginController {
 
@@ -28,6 +30,32 @@ public class LoginController {
     @FXML
     private Label successMessage;
 
+    private static final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
+
+    private User validateLogin(String username, String password) {
+        String line;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            while ((line = br.readLine()) != null) {
+                String[] credentials = line.split(",");
+                if (credentials.length >= 3) {
+                    String csvUsername = credentials[0].trim();
+                    String csvPassword = credentials[1].trim();
+                    String[] categories = credentials[2].split(";");
+
+                    if (csvUsername.equals(username) && csvPassword.equals(password)) {
+                        List<String> userPreferences = Arrays.asList(categories);
+                        return new User(csvUsername, csvPassword, userPreferences); // Successful login
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Login failed
+    }
+
     @FXML
     public void handleLogin(ActionEvent event) {
         String username = usernameField.getText();
@@ -38,48 +66,31 @@ public class LoginController {
         successMessage.setText("");
 
         // Validate login credentials
-        if (validateLogin(username, password)) {
+        User loggedInUser = validateLogin(username, password);
+        if (loggedInUser != null) {
             successMessage.setText("Successfully logged in!");
-
-            // Load the home page
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-                Parent homeRoot = loader.load();
-
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                Scene homeScene = new Scene(homeRoot);
-                stage.setScene(homeScene);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            loadHomePage(loggedInUser);
         } else {
             errorMessage.setText("Invalid username or password. Please try again.");
         }
     }
 
-    private boolean validateLogin(String username, String password) {
-        String csvFile = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
-        String line;
+    private void loadHomePage(User user) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+            Parent homeRoot = loader.load();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            while ((line = br.readLine()) != null) {
-                String[] credentials = line.split(",");
-                // Check if the line has at least 2 elements for username and password
-                if (credentials.length >= 2) {
-                    String csvUsername = credentials[0].trim();
-                    String csvPassword = credentials[1].trim();
+            // Pass user information to the home page controller (e.g., for personalized content)
+            HomeController homeController = loader.getController();
+            homeController.setUser(user);
 
-                    // Validate username and password
-                    if (csvUsername.equals(username) && csvPassword.equals(password)) {
-                        return true; // Successful login
-                    }
-                }
-            }
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            Scene homeScene = new Scene(homeRoot);
+            stage.setScene(homeScene);
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            errorMessage.setText("Failed to load home page.");
         }
-
-        return false; // Login failed
     }
 }

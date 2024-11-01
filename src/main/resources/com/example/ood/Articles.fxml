@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ArticlesController">
+    <Label style="-fx-font-size: 24px;" text="Top Articles" />
+
+    <!-- List of article titles -->
+    <ListView fx:id="articlesListView" prefHeight="347.0" prefWidth="300.0" />
+
+    <!-- Label to show full article content -->
+    <Label fx:id="articleContentLabel" prefHeight="110.0" prefWidth="300" style="-fx-font-size: 14px;" wrapText="true" />
+
+    <!-- Back button to return to the home view -->
+    <HBox alignment="CENTER">
+        <Button onAction="#handleBackButton" text="Back" />
+    </HBox>
+</VBox>

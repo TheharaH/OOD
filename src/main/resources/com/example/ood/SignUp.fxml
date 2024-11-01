@@ -25,11 +25,11 @@
         <Label layoutX="160.0" layoutY="180.0" text="Categories:" />
         <VBox layoutX="260.0" layoutY="180.0" spacing="5.0">
             <children>
-                <CheckBox fx:id="category1" text="Category 1" />
-                <CheckBox fx:id="category2" text="Category 2" />
-                <CheckBox fx:id="category3" text="Category 3" />
-                <CheckBox fx:id="category4" text="Category 4" />
-                <CheckBox fx:id="category5" text="Category 5" />
+                <CheckBox fx:id="category1" text="Technology" />
+                <CheckBox fx:id="category2" text="Health" />
+                <CheckBox fx:id="category3" text="AI" />
+                <CheckBox fx:id="category4" text="Sports" />
+                <CheckBox fx:id="category5" text="Education" />
             </children>
         </VBox>
 
