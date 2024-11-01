@@ -56,6 +56,7 @@ public class ArticlesController {
                 URL url = new URL(API_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 
                 // Read API response
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -86,13 +87,26 @@ public class ArticlesController {
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
 
-        // Extract titles and content
+        // Extract titles, content, and category
         for (int i = 0; i < jsonArticles.size(); i++) {
             JsonObject jsonArticle = jsonArticles.get(i).getAsJsonObject();
-            String title = jsonArticle.get("title").getAsString();
-            String content = jsonArticle.has("content") ? jsonArticle.get("content").getAsString() : "Content not available.";
+
+            // Check for null values in each field and provide a default value if necessary
+            String title = jsonArticle.has("title") && !jsonArticle.get("title").isJsonNull()
+                    ? jsonArticle.get("title").getAsString()
+                    : "Untitled";
+
+            String content = jsonArticle.has("content") && !jsonArticle.get("content").isJsonNull()
+                    ? jsonArticle.get("content").getAsString()
+                    : "Content not available.";
+
+            String category = jsonArticle.has("category") && !jsonArticle.get("category").isJsonNull()
+                    ? jsonArticle.get("category").getAsString()
+                    : "General";
+
+            // Add to titles list and articles list
             titles.add(title);
-            articles.add(new Article(title, content));
+            articles.add(new Article(title, content, category));
         }
         return titles;
     }
@@ -117,21 +131,6 @@ public class ArticlesController {
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    // Inner class to represent article data
-    private static class Article {
-        private String title;
-        private String content;
-
-        public Article(String title, String content) {
-            this.title = title;
-            this.content = content;
-        }
-
-        public String getContent() {
-            return content;
         }
     }
 }

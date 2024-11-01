@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ArticlesController">
+<VBox alignment="TOP_CENTER" prefHeight="594.0" prefWidth="746.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ArticlesController">
     <Label style="-fx-font-size: 24px;" text="Top Articles" />
 
     <!-- List of article titles -->
