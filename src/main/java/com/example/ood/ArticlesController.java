@@ -4,16 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.collections.FXCollections;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ListView;
+import javafx.collections.FXCollections;
+import javafx.application.Platform;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,25 +23,32 @@ import java.util.List;
 public class ArticlesController {
 
     @FXML
-    private ListView<String> articlesListView;  // ListView to display article titles
+    private ListView<String> articlesListView; // ListView to display article titles
 
-    @FXML
-    private Label articleContentLabel;  // Label to display full article content
-
-    private final String API_KEY = "7b15371b5730491896a63377122237bb"; // Replace with your actual API key
+    private final String API_KEY = "7b15371b5730491896a63377122237bb";
     private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&apiKey=" + API_KEY;
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
+
+    // Define categories and their associated keywords
+    private final String[] categories = {"Technology", "AI", "Health", "Education", "Sports"};
+    private final String[] keywords = {
+            "technology, tech, gadgets, innovation",
+            "AI, artificial intelligence, machine learning, deep learning",
+            "health, wellness, fitness, medicine",
+            "education, learning, schools, universities",
+            "sports, athletics, games, competitions"
+    };
 
     @FXML
     public void initialize() {
         fetchArticles();
 
-        // Set an event listener to load full article content when an item is selected
+        // Set event listener to load full article content when an item is selected
         articlesListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && newVal.intValue() >= 0) {
                 Article selectedArticle = articles.get(newVal.intValue());
-                articleContentLabel.setText(selectedArticle.getContent());
+                openArticleDetailView(selectedArticle);
             }
         });
     }
@@ -87,39 +92,62 @@ public class ArticlesController {
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
 
-        // Extract titles, content, and category
         for (int i = 0; i < jsonArticles.size(); i++) {
             JsonObject jsonArticle = jsonArticles.get(i).getAsJsonObject();
-
-            // Check for null values in each field and provide a default value if necessary
             String title = jsonArticle.has("title") && !jsonArticle.get("title").isJsonNull()
                     ? jsonArticle.get("title").getAsString()
                     : "Untitled";
-
             String content = jsonArticle.has("content") && !jsonArticle.get("content").isJsonNull()
                     ? jsonArticle.get("content").getAsString()
                     : "Content not available.";
 
-            String category = jsonArticle.has("category") && !jsonArticle.get("category").isJsonNull()
-                    ? jsonArticle.get("category").getAsString()
-                    : "General";
+            String category = categorizeArticle(title, content); // Categorize the article
 
-            // Add to titles list and articles list
             titles.add(title);
-            articles.add(new Article(title, content, category));
+            articles.add(new Article(title, content, category)); // Include category in Article object
         }
         return titles;
     }
 
+    // Categorize the article based on keywords
+    private String categorizeArticle(String title, String content) {
+        for (int i = 0; i < categories.length; i++) {
+            String[] categoryKeywords = keywords[i].split(", ");
+            for (String keyword : categoryKeywords) {
+                if (title.toLowerCase().contains(keyword.toLowerCase()) ||
+                        content.toLowerCase().contains(keyword.toLowerCase())) {
+                    return categories[i];
+                }
+            }
+        }
+        return "General"; // Default category
+    }
+
+    // Show article details in a new view
+    private void openArticleDetailView(Article article) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
+            Parent root = loader.load();
+
+            ArticleDetailController controller = loader.getController();
+            controller.setArticle(article);
+
+            Stage stage = (Stage) articlesListView.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // Display an alert in case of API failure
     private void showAlert(String title, String content) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(content);
         alert.showAndWait();
     }
 
-    // Back button to return to the main view
     @FXML
     private void handleBackButton() {
         try {
