@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.application.Platform;
+import javafx.scene.control.ComboBox;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -24,24 +25,31 @@ public class ArticlesController {
 
     @FXML
     private ListView<String> articlesListView; // ListView to display article titles
+    @FXML
+    private ComboBox<String> categoryComboBox; // ComboBox for selecting categories
 
     private final String API_KEY = "7b15371b5730491896a63377122237bb";
-    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&apiKey=" + API_KEY;
+    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=100&apiKey=" + API_KEY;
+
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
+    private String currentUsername; // Store the current user's username
 
     // Define categories and their associated keywords
-    private final String[] categories = {"Technology", "AI", "Health", "Education", "Sports"};
+    private final String[] categories = {"Health", "Artificial Intelligence", "Technology", "Education", "Sports"};
     private final String[] keywords = {
+            "health, wellness, fitness, medicine",
             "technology, tech, gadgets, innovation",
             "AI, artificial intelligence, machine learning, deep learning",
-            "health, wellness, fitness, medicine",
             "education, learning, schools, universities",
             "sports, athletics, games, competitions"
     };
 
     @FXML
     public void initialize() {
+        categoryComboBox.setItems(FXCollections.observableArrayList(categories)); // Populate ComboBox
+        categoryComboBox.setOnAction(event -> filterArticlesByCategory()); // Set event handler
+
         fetchArticles();
 
         // Set event listener to load full article content when an item is selected
@@ -51,6 +59,11 @@ public class ArticlesController {
                 openArticleDetailView(selectedArticle);
             }
         });
+    }
+
+    // Set the current username for reading history
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
     }
 
     // Fetch articles from the API
@@ -74,10 +87,11 @@ public class ArticlesController {
                 in.close();
 
                 // Parse and update UI with article titles
-                List<String> articleTitles = parseArticles(response.toString());
+                parseArticles(response.toString());
 
-                // Update ListView on the JavaFX Application Thread
-                Platform.runLater(() -> articlesListView.setItems(FXCollections.observableArrayList(articleTitles)));
+                // Update ListView with all articles by default
+                updateArticleListView(articles);
+
             } catch (Exception e) {
                 Platform.runLater(() -> showAlert("Error", "Failed to fetch articles. Please try again later."));
                 e.printStackTrace();
@@ -86,8 +100,8 @@ public class ArticlesController {
     }
 
     // Parse JSON response and extract article titles and content
-    private List<String> parseArticles(String jsonResponse) {
-        List<String> titles = new ArrayList<>();
+    private void parseArticles(String jsonResponse) {
+        articles.clear(); // Clear previous articles
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
@@ -103,10 +117,8 @@ public class ArticlesController {
 
             String category = categorizeArticle(title, content); // Categorize the article
 
-            titles.add(title);
             articles.add(new Article(title, content, category)); // Include category in Article object
         }
-        return titles;
     }
 
     // Categorize the article based on keywords
@@ -123,9 +135,37 @@ public class ArticlesController {
         return "General"; // Default category
     }
 
+    // Update ListView with articles
+    private void updateArticleListView(List<Article> articlesToShow) {
+        List<String> titles = new ArrayList<>();
+        for (Article article : articlesToShow) {
+            titles.add(article.getTitle());
+        }
+        articlesListView.setItems(FXCollections.observableArrayList(titles));
+    }
+
+    // Filter articles by selected category
+    private void filterArticlesByCategory() {
+        String selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
+        if (selectedCategory != null) {
+            List<Article> filteredArticles = new ArrayList<>();
+            for (Article article : articles) {
+                if (article.getCategory().equals(selectedCategory)) {
+                    filteredArticles.add(article);
+                }
+            }
+            updateArticleListView(filteredArticles);
+        } else {
+            updateArticleListView(articles); // Show all articles if no category is selected
+        }
+    }
+
     // Show article details in a new view
     private void openArticleDetailView(Article article) {
         try {
+            // Save the article to the reading history
+            ReadingHistory.addArticle(currentUsername, article); // Pass the current username to save to history
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
             Parent root = loader.load();
 
@@ -162,3 +202,5 @@ public class ArticlesController {
         }
     }
 }
+
+

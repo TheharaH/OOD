@@ -50,8 +50,17 @@ public class HomeController {
     // Handle button click to load the reading history page
     @FXML
     public void handleHistoryButton() {
-        System.out.println("Loading Reading History Page...");
-        // Add your logic here to switch to the History page.
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ReadingHistory.fxml")); // Path to the reading history FXML
+            Parent root = loader.load();
+
+            // Switch to the reading history scene
+            Stage stage = (Stage) historyButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions
+        }
     }
 
     // Handle button click to load the manage profile page
