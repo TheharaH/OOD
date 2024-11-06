@@ -56,7 +56,7 @@ public class LoginController {
         return null; // Login failed
     }
 
-    @FXML
+    /*@FXML
     public void handleLogin(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -73,7 +73,31 @@ public class LoginController {
         } else {
             errorMessage.setText("Invalid username or password. Please try again.");
         }
+    }*/
+
+    @FXML
+    public void handleLogin(ActionEvent event) {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // Clear previous messages
+        errorMessage.setText("");
+        successMessage.setText("");
+
+        // Validate login credentials
+        User loggedInUser = validateLogin(username, password);
+        if (loggedInUser != null) {
+            successMessage.setText("Successfully logged in!");
+
+            // Set the logged-in user in the session
+            SessionManager.setCurrentUser(loggedInUser);
+
+            loadHomePage(loggedInUser);
+        } else {
+            errorMessage.setText("Invalid username or password. Please try again.");
+        }
     }
+
 
     private void loadHomePage(User user) {
         try {

@@ -1,6 +1,6 @@
 package com.example.ood;
 
-public class SessionManager {
+/*public class SessionManager {
     private static User currentUser;
 
     public static void setCurrentUser(User user) {
@@ -13,5 +13,38 @@ public class SessionManager {
 
     public static void clearSession() {
         currentUser = null;
+    }
+}*/
+/*public class SessionManager {
+    private static User currentUser;
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+        System.out.println("SessionManager: currentUser set to: " + (user != null ? user.getUsername() : "null"));
+    }
+
+    public static User getCurrentUser() {
+        System.out.println("SessionManager: getCurrentUser called. currentUser is: " + (currentUser != null ? currentUser.getUsername() : "null"));
+        return currentUser;
+    }
+
+}*/
+
+public class SessionManager {
+    private static User currentUser;
+
+    // Set the current user in the session (this is only done once after login)
+    public static void setCurrentUser(User user) {
+        if (user != null) {
+            currentUser = user;
+            System.out.println("SessionManager: currentUser set to: " + user.getUsername());
+        }
+    }
+
+    // Get the current user from the session
+    public static User getCurrentUser() {
+        System.out.println("SessionManager: getCurrentUser called. currentUser is: " +
+                (currentUser != null ? currentUser.getUsername() : "null"));
+        return currentUser;
     }
 }

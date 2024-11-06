@@ -62,9 +62,53 @@ public class ArticlesController {
     }
 
     // Set the current username for reading history
-    public void setCurrentUsername(String username) {
+    /*public void setCurrentUsername(String username) {
         this.currentUsername = username;
+    }*/
+
+    /*public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+        System.out.println("Current username set to: " + username); // Print statement for confirmation
+    }*/
+
+
+    /*public void setCurrentUsername(String username) {
+        User user = SessionManager.getCurrentUser();
+        this.currentUsername = user != null ? user.getUsername() : null;
+        System.out.println("ArticlesController: Current username set to: " + this.currentUsername);
+    }*/
+
+    /*public void setCurrentUsername(String username) {
+        // Ensure currentUser is set in the session before trying to access it
+        User user = SessionManager.getCurrentUser();
+
+        // If user is not null, set currentUsername from the username passed
+        if (user != null && username != null) {
+            this.currentUsername = username;
+            System.out.println("ArticlesController: Current username set to: " + this.currentUsername);
+        } else {
+            // If user is null, print an error message or handle accordingly
+            this.currentUsername = null;
+            System.out.println("ArticlesController: No user is logged in, cannot set username.");
+        }
+    }*/
+
+    public void setCurrentUsername(String username) {
+        // Fetch the current user from the session
+        User user = SessionManager.getCurrentUser();
+
+        if (user != null) {
+            // Set the current username from the user object
+            this.currentUsername = user.getUsername();
+            System.out.println("ArticlesController: Current username set to: " + this.currentUsername);
+        } else {
+            // If no user is logged in, print an error message
+            this.currentUsername = null;
+            System.out.println("ArticlesController: No user is logged in, cannot set username.");
+        }
     }
+
+
 
     // Fetch articles from the API
     private void fetchArticles() {
@@ -179,6 +223,26 @@ public class ArticlesController {
             e.printStackTrace();
         }
     }
+    // Save the article to the reading history with the current username
+    /*private void openArticleDetailView(Article article) {
+        try {
+            // Save article to reading history
+            ReadingHistory.addArticle(currentUsername, article);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
+            Parent root = loader.load();
+
+            ArticleDetailController controller = loader.getController();
+            controller.setArticle(article);
+
+            Stage stage = (Stage) articlesListView.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
+
 
     // Display an alert in case of API failure
     private void showAlert(String title, String content) {
@@ -201,6 +265,8 @@ public class ArticlesController {
             e.printStackTrace();
         }
     }
+
+
 }
 
 

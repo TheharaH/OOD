@@ -32,7 +32,7 @@ public class ArticleDetailController {
     @FXML
     private void handleBackButton() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("articles.fxml")); // Main articles view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml")); // Main articles view
             Parent root = loader.load();
 
             Stage stage = (Stage) titleLabel.getScene().getWindow();

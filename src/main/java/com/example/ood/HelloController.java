@@ -86,6 +86,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 
 import java.io.IOException;
 
@@ -110,6 +112,15 @@ public class HelloController {
         }
     }*/
 
+    @FXML
+    private ListView<String> articlesListView;
+
+    private String currentUsername;
+
+    // You can set the username via a setter method, constructor, or directly
+    public void setCurrentUsername(String username) {
+        this.currentUsername = username;
+    }
     @FXML
     public void handleLogin(ActionEvent event) {
         try {
@@ -157,5 +168,30 @@ public class HelloController {
             e.printStackTrace();
         }
     }
+    /*public void goToReadingHistory() {
+        try {
+            // Load the FXML file for the reading history view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ReadingHistoryView.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller for the reading history view
+            ReadingHistoryController controller = loader.getController();
+
+            // Set the current username in the controller to load user-specific history
+            controller.setCurrentUsername(currentUsername);
+
+            // Get the current stage (the window) of the Articles view
+            Stage stage = (Stage) articlesListView.getScene().getWindow();
+
+            // Set the new scene with the loaded FXML
+            stage.setScene(new Scene(root));
+
+            // Show the stage (window)
+            stage.show();
+        } catch (IOException e) {
+            // Handle any exceptions that may occur during the scene loading
+            e.printStackTrace();
+        }
+    }*/
 }
 

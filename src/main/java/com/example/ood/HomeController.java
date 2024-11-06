@@ -32,7 +32,7 @@ public class HomeController {
     }
 
     // Handle button click to load the articles page
-    @FXML
+    /*@FXML
     public void handleArticlesButton() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("articles.fxml")); // Path to your articles FXML
@@ -45,7 +45,31 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace(); // Handle exceptions
         }
+    }*/
+    @FXML
+    public void handleArticlesButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("articles.fxml")); // Path to your articles FXML
+            Parent root = loader.load();
+
+            // Get the controller associated with the FXML
+            ArticlesController articlesController = loader.getController();
+
+            // Assuming the current user is stored in SessionManager
+            User currentUser = SessionManager.getCurrentUser();
+            if (currentUser != null) {
+                articlesController.setCurrentUsername(currentUser.getUsername());
+            }
+
+            // Switch to the articles scene
+            Stage stage = (Stage) articlesButton.getScene().getWindow(); // Get the current stage
+            stage.setScene(new Scene(root)); // Switch to the articles scene
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions
+        }
     }
+
 
     // Handle button click to load the reading history page
     @FXML
