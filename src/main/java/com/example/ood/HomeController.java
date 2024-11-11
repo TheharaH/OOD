@@ -7,6 +7,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+import java.io.IOException;
+import javafx.stage.Stage;
+
 
 public class HomeController {
 
@@ -20,7 +27,7 @@ public class HomeController {
     private Button historyButton;
 
     @FXML
-    private Button manageProfileButton;
+    private Button logoutButton;
 
     // Method to set the user and update the welcome message
     public void setUser(User user) {
@@ -93,4 +100,42 @@ public class HomeController {
         System.out.println("Loading Manage Profile Page...");
         // Add your logic here to switch to the Manage Profile page.
     }
+
+    @FXML
+    public void logout() {
+        try {
+            // Load the Hello.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Hello-view.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage using the logoutButton
+            Stage stage = (Stage) logoutButton.getScene().getWindow();
+
+            // Set the new scene
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+
+            System.out.println("Successfully logged out and navigated to Hello.fxml");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to load Hello.fxml on logout");
+        }
+    }
+
+
+    /*@FXML
+    private void logout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) historyListView.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 }

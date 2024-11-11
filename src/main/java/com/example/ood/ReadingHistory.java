@@ -25,7 +25,7 @@ public class ReadingHistory {
         return readingHistory;
     }
 
-    public static void loadReadingHistory() {
+    /*public static void loadReadingHistory() {
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -39,7 +39,40 @@ public class ReadingHistory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }*/
+    public static void loadReadingHistory() {
+        // Clear previous history to avoid duplicates on reload
+        readingHistory.clear();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String line;
+            // Get the current user from the session
+            User currentUser = SessionManager.getCurrentUser();
+
+            // Check if the current user is null before processing history
+            if (currentUser == null) {
+                System.out.println("No user is currently logged in.");
+                return;  // Exit if no user is logged in
+            }
+
+            // Loop through each line in the file
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2) {
+                    String username = parts[0];
+                    String articleTitle = parts[1];
+
+                    // Only add history entries for the current user
+                    if (username.equals(currentUser.getUsername())) {
+                        readingHistory.add(new HistoryEntry(username, articleTitle));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     /*private static void saveToCSV(HistoryEntry entry) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH, true))) {
