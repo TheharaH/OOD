@@ -94,6 +94,7 @@ public class HomeController {
         }
     }
 
+
     // Handle button click to load the manage profile page
     @FXML
     public void handleManageProfileButton() {
@@ -125,17 +126,4 @@ public class HomeController {
     }
 
 
-    /*@FXML
-    private void logout() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) historyListView.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
