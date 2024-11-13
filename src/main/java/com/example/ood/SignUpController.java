@@ -51,6 +51,7 @@ public class SignUpController {
 
     private static final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
 
+
     @FXML
     private void handleSignup() {
         String username = usernameField.getText();
@@ -91,6 +92,7 @@ public class SignUpController {
 
         String categories = String.join(";", selectedCategories);
 
+        // Write new user data to CSV
         try (FileWriter writer = new FileWriter(CSV_FILE_PATH, true)) {
             writer.append(username)
                     .append(",")
@@ -102,16 +104,11 @@ public class SignUpController {
             successMessage.setText("Successfully signed up!");
             errorMessage.setText("");
 
-            // Clear fields after successful sign-up
-            usernameField.clear();
-            passwordField.clear();
-            confirmPasswordField.clear();
-            category1.setSelected(false);
-            category2.setSelected(false);
-            category3.setSelected(false);
-            category4.setSelected(false);
-            category5.setSelected(false);
+            // Set the new user in SessionManager
+            User newUser = new User(username, password, selectedCategories);
+            SessionManager.setCurrentUser(newUser);
 
+            // Load the home page
             loadHomePage();
 
         } catch (IOException e) {

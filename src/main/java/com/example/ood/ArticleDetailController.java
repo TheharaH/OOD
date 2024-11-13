@@ -156,7 +156,9 @@ public class ArticleDetailController {
     @FXML
     private Button skipButton;
 
-    private boolean liked = false;  // Track if the article is liked
+    private boolean liked = false;
+
+    private boolean skiped = false;// Track if the article is liked
 
     private Article article;
 
@@ -180,14 +182,20 @@ public class ArticleDetailController {
     // Called when the "Skip" button is clicked
     @FXML
     private void handleSkipButton() {
+
+        skiped = !skiped;
+        skipButton.setText(skiped ? "Skiped" : "skip");  // Update button text
+
+
         // Disable the "Skip" button and enable the "Like" button
-        skipButton.setDisable(true);
-        likeButton.setDisable(false);
+        skipButton.setDisable(false);
+        likeButton.setDisable(true);
 
         // Save the skip status to the CSV
         String title = titleLabel.getText();
-        String likeStatus = "skipped";  // Indicate the article was skipped
-        updateLikeStatusInCSV(title, likeStatus);
+        String skipStatus = skiped ? "skip" : "didn't skip";
+        //String likeStatus = skiped ? "like" : "didn't like";
+        updateSkipStatusInCSV(title, skipStatus);
     }
 
     // Update like or skip status in the CSV
@@ -226,6 +234,84 @@ public class ArticleDetailController {
             }
         }
     }
+
+
+    /*private void updateSkipStatusInCSV(String articleTitle,  String skipStatus) {
+        String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
+        List<String> lines = new ArrayList<>();
+        boolean isUpdated = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String line;
+            String username = SessionManager.getCurrentUser().getUsername(); // Get the current logged-in user
+
+            // Read each line and update the matching entry's skip status
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length >= 4 && parts[0].equals(username) && parts[1].equals(articleTitle)) {
+                    // If a matching entry is found, update the skip status in the fourth column
+                    line = username + "," + articleTitle + "," + parts[1] + "," + skipStatus;
+                    isUpdated = true;  // Mark that we've updated the status
+                }
+                lines.add(line);  // Add each line (updated or not) to the list
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // If an entry was updated, write the updated content back to the CSV
+        if (isUpdated) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
+    private void updateSkipStatusInCSV(String articleTitle, String skipStatus) {
+        String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
+        List<String> lines = new ArrayList<>();
+        boolean isUpdated = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String line;
+            String username = SessionManager.getCurrentUser().getUsername(); // Get the current logged-in user
+
+            // Read each line and update the matching entry's skip status
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                if (parts.length >= 4 && parts[0].equals(username) && parts[1].equals(articleTitle)) {
+                    // Update the skip status while keeping the current like status
+                    String likeStatus = parts[2];  // Keep the existing like status
+                    line = username + "," + articleTitle + "," + likeStatus + "," + skipStatus;
+                    isUpdated = true;
+                }
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Write updated content back to the CSV if an entry was modified
+        if (isUpdated) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+                for (String line : lines) {
+                    bw.write(line);
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     // Set the article data to be displayed
     public void setArticle(Article article) {

@@ -17,7 +17,7 @@ public class ReadingHistory {
 
     public static void addArticle(String username, Article article) {
         // Default the likeStatus to "didn't like"
-        HistoryEntry entry = new HistoryEntry(username, article.getTitle(), "didn't like");
+        HistoryEntry entry = new HistoryEntry(username, article.getTitle(), "didn't like", "didn't skip");
         readingHistory.add(entry);
         saveToCSV(entry);
     }
@@ -50,11 +50,13 @@ public class ReadingHistory {
                     String articleTitle = parts[1];
 
                     // Set a default value for likeStatus (for example, "didn't like")
-                    String likeStatus = "didn't like";  // Default value
+                    String likeStatus = "didn't like";
+                    String skipStatus = "didn't skip";  // Default value
+// Default value
 
                     // Only add history entries for the current user
                     if (username.equals(currentUser.getUsername())) {
-                        readingHistory.add(new HistoryEntry(username, articleTitle, likeStatus));
+                        readingHistory.add(new HistoryEntry(username, articleTitle, likeStatus, skipStatus));
                     }
                 }
             }
@@ -71,9 +73,11 @@ public class ReadingHistory {
             String username = entry.getUsername();
             String articleTitle = entry.getArticleTitle();
             String likeStatus = entry.getLikeStatus();
+            String skipStatus = entry.getSkipStatus();
+
 
             if (username != null) {
-                bw.write(username + "," + articleTitle + "," + likeStatus);
+                bw.write(username + "," + articleTitle + "," + likeStatus + "," + skipStatus);
                 bw.newLine();
             } else {
                 System.out.println("Username is null. Cannot save to CSV.");
@@ -89,13 +93,16 @@ public class ReadingHistory {
     public static class HistoryEntry {
         private String username;
         private String articleTitle;
-        private String likeStatus;  // Field to store the like status
+        private String likeStatus;
+        private String skipStatus;  // Field to store the like status
+        // Field to store the like status
 
         // Constructor
-        public HistoryEntry(String username, String articleTitle, String likeStatus) {
+        public HistoryEntry(String username, String articleTitle, String likeStatus, String skipStatus) {
             this.username = username;
             this.articleTitle = articleTitle;
             this.likeStatus = likeStatus;
+            this.skipStatus = skipStatus;
         }
 
         // Getter for username
@@ -116,6 +123,15 @@ public class ReadingHistory {
         // Setter for likeStatus
         public void setLikeStatus(String likeStatus) {
             this.likeStatus = likeStatus;
+        }
+
+        public String getSkipStatus() {
+            return skipStatus;
+        }
+
+
+        public void setSkipStatus(String skipStatus) {
+            this.skipStatus = skipStatus;
         }
     }
 }
