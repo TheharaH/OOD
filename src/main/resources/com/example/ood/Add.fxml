@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="594.0" prefWidth="746.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.AddController">
-    <TextField fx:id="titleTextField" promptText="Enter article title" />
-    <TextField fx:id="contentTextField" promptText="Enter article content" />
+<VBox alignment="TOP_CENTER" prefHeight="523.0" prefWidth="783.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.AddController">
+   <Label prefHeight="62.0" prefWidth="92.0" text="ADD AN ARTICLE" />
+    <TextField fx:id="titleTextField" prefHeight="62.0" prefWidth="783.0" promptText="Enter article title" />
+    <TextField fx:id="contentTextField" prefHeight="275.0" prefWidth="783.0" promptText="Enter article content" />
 
     <!-- Button to save the article -->
-    <Button text="Save Article" onAction="#saveArticle" />
-    <Button text="Back" onAction="#handleBackButton" />
+    <Button onAction="#saveArticle" prefHeight="26.0" prefWidth="801.0" text="Save Article" />
+    <Button onAction="#handleBackButton" prefHeight="26.0" prefWidth="783.0" text="Back" />
 </VBox>

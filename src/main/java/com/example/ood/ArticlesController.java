@@ -19,6 +19,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ArticlesController {
 
@@ -28,7 +31,7 @@ public class ArticlesController {
     private ComboBox<String> categoryComboBox; // ComboBox for selecting categories
 
     private final String API_KEY = "7b15371b5730491896a63377122237bb";
-    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=100&apiKey=" + API_KEY;
+    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=" + API_KEY;
     private final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
@@ -44,12 +47,15 @@ public class ArticlesController {
             "sports, athletics, games, competitions"
     };
 
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     @FXML
     public void initialize() {
         categoryComboBox.setItems(FXCollections.observableArrayList(categories)); // Populate ComboBox
         categoryComboBox.setOnAction(event -> filterArticlesByCategory()); // Set event handler
 
-        fetchArticles(); // Fetch and store articles in CSV
+        // Schedule article fetching every 6 hours
+        scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 6, TimeUnit.HOURS);
 
         // Set event listener to load full article content when an item is selected
         articlesListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
@@ -62,20 +68,16 @@ public class ArticlesController {
     }
 
     private String categorizeArticle(String title, String content) {
-        // Combine title and content to check for keywords
         String textToCheck = (title + " " + content).toLowerCase();
 
-        // Loop through the categories and check if any keyword is in the article's text
         for (int i = 0; i < categories.length; i++) {
             String[] keywordArray = keywords[i].split(", ");
             for (String keyword : keywordArray) {
                 if (textToCheck.contains(keyword)) {
-                    return categories[i]; // Return the category if a keyword is found
+                    return categories[i];
                 }
             }
         }
-
-        // Return "Uncategorized" if no match is found
         return "Uncategorized";
     }
 
@@ -83,7 +85,6 @@ public class ArticlesController {
         String selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedCategory != null) {
-            // Filter articles based on the selected category's keywords
             for (int i = 0; i < categories.length; i++) {
                 if (categories[i].equals(selectedCategory)) {
                     filterArticlesByKeywords(keywords[i]);
@@ -96,13 +97,11 @@ public class ArticlesController {
     private void filterArticlesByKeywords(String keywords) {
         List<Article> filteredArticles = new ArrayList<>();
 
-        // Loop through the articles and filter based on keywords
         for (Article article : articles) {
             String title = article.getTitle().toLowerCase();
             String description = article.getContent().toLowerCase();
             String[] keywordArray = keywords.split(", ");
 
-            // Check if any keyword is found in the article's title or description
             for (String keyword : keywordArray) {
                 if (title.contains(keyword) || description.contains(keyword)) {
                     filteredArticles.add(article);
@@ -110,15 +109,12 @@ public class ArticlesController {
                 }
             }
         }
-
-        // Update the ListView with the filtered articles
         updateArticlesListView(filteredArticles);
     }
 
     private void updateArticlesListView(List<Article> filteredArticles) {
         List<String> articleTitles = new ArrayList<>();
 
-        // Extract article titles and add them to the ListView
         for (Article article : filteredArticles) {
             articleTitles.add(article.getTitle());
         }
@@ -126,22 +122,18 @@ public class ArticlesController {
         articlesListView.setItems(FXCollections.observableArrayList(articleTitles));
     }
 
-    // Set the current username for reading history
     public void setCurrentUsername(String username) {
         this.currentUsername = username;
     }
 
-    // Fetch articles from the API
     private void fetchArticles() {
         new Thread(() -> {
             try {
-                // Establish connection
                 URL url = new URL(API_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-                // Read API response
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder response = new StringBuilder();
                 String inputLine;
@@ -151,10 +143,7 @@ public class ArticlesController {
                 }
                 in.close();
 
-                // Parse articles from the API response and save to CSV
                 parseAndSaveArticles(response.toString());
-
-                // Load articles from CSV to display
                 loadArticlesFromCSV();
 
             } catch (Exception e) {
@@ -164,9 +153,8 @@ public class ArticlesController {
         }).start();
     }
 
-    // Parse JSON response, extract article details, and save to CSV
     private void parseAndSaveArticles(String jsonResponse) {
-        articles.clear(); // Clear previous articles
+        articles.clear();
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
@@ -181,9 +169,8 @@ public class ArticlesController {
                         ? jsonArticle.get("content").getAsString()
                         : "Content not available.";
 
-                String category = categorizeArticle(title, content); // Categorize the article
+                String category = categorizeArticle(title, content);
 
-                // Write article details to CSV
                 writer.write(String.join(",", title, content, category));
                 writer.newLine();
 
@@ -194,7 +181,6 @@ public class ArticlesController {
         }
     }
 
-    // Load articles from CSV to display
     private void loadArticlesFromCSV() {
         articles.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
@@ -210,7 +196,6 @@ public class ArticlesController {
                 }
             }
 
-            // Update ListView with article titles
             Platform.runLater(() -> {
                 List<String> articleTitles = new ArrayList<>();
                 for (Article article : articles) {
@@ -224,7 +209,6 @@ public class ArticlesController {
         }
     }
 
-    // Save article reading history
     private void saveReadingHistory(Article article) {
         if (currentUsername != null) {
             ReadingHistory.addArticle(currentUsername, article);
@@ -233,7 +217,6 @@ public class ArticlesController {
         }
     }
 
-    // Open the full article view
     private void openArticleDetailView(Article article) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
@@ -246,24 +229,20 @@ public class ArticlesController {
             stage.setScene(new Scene(root));
             stage.show();
 
-            // Close the current stage (Article List view)
             Stage currentStage = (Stage) articlesListView.getScene().getWindow();
-            currentStage.close();  // Close the current stage
+            currentStage.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // Show error alert
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
 
     @FXML
     private void handleBackButton() {
@@ -279,7 +258,4 @@ public class ArticlesController {
         }
     }
 }
-
-
-
 

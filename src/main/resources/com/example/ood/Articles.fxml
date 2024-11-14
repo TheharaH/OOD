@@ -9,20 +9,16 @@
 
 <!-- Import ComboBox -->
 
-<VBox alignment="TOP_CENTER" prefHeight="594.0" prefWidth="746.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ArticlesController">
+<VBox alignment="TOP_CENTER" prefHeight="472.0" prefWidth="746.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ArticlesController">
     <Label style="-fx-font-size: 24px;" text="Top Articles" />
 
     <!-- ComboBox for category selection -->
     <ComboBox fx:id="categoryComboBox" prefWidth="300.0" />
 
     <!-- List of article titles -->
-    <ListView fx:id="articlesListView" prefHeight="300.0" prefWidth="347.0" />
-
-    <!-- Label to show full article content -->
-    <Label fx:id="articleContentLabel" prefHeight="110.0" prefWidth="300" style="-fx-font-size: 14px;" wrapText="true" />
+    <ListView fx:id="articlesListView" prefHeight="309.0" prefWidth="746.0" />
+     <Button onAction="#handleBackButton" text="Back" />
 
     <!-- Back button to return to the home view -->
-    <HBox alignment="CENTER">
-        <Button onAction="#handleBackButton" text="Back" />
-    </HBox>
+    <HBox alignment="CENTER" />
 </VBox>
