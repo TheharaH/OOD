@@ -13,7 +13,15 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
-
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.ListView;
+import javafx.stage.Stage;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -30,8 +38,8 @@ public class ArticlesController {
     @FXML
     private ComboBox<String> categoryComboBox; // ComboBox for selecting categories
 
-    private final String API_KEY = "7b15371b5730491896a63377122237bb";
-    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=" + API_KEY;
+    private final String API_KEY = "72f3769687af4decb26ba81130a9af2a";
+    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=30&apiKey=" + API_KEY;
     private final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
@@ -55,7 +63,7 @@ public class ArticlesController {
         categoryComboBox.setOnAction(event -> filterArticlesByCategory()); // Set event handler
 
         // Schedule article fetching every 6 hours
-        scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 6, TimeUnit.HOURS);
+        scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 10, TimeUnit.HOURS);
 
         // Set event listener to load full article content when an item is selected
         articlesListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
@@ -126,6 +134,8 @@ public class ArticlesController {
         this.currentUsername = username;
     }
 
+
+
     private void fetchArticles() {
         new Thread(() -> {
             try {
@@ -182,32 +192,30 @@ public class ArticlesController {
     }
 
     private void loadArticlesFromCSV() {
-        articles.clear();
+        List<String> articles = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 3) {
-                    String title = parts[0];
-                    String content = parts[1];
-                    String category = parts[2];
+                // Skip empty lines
+                if (line.trim().isEmpty()) {
+                    continue;
+                }
 
-                    articles.add(new Article(title, content, category));
+                String[] parts = line.split(",");
+                if (parts.length > 0) {
+                    String title = parts[0].trim();  // Get the title (first column)
+                    title = title.replace("\"", "");  // Remove any quotes around the title
+                    articles.add(title);  // Add the title to the list
+                } else {
+                    System.out.println("Skipping invalid line: " + line);  // Optionally log invalid lines
                 }
             }
-
-            Platform.runLater(() -> {
-                List<String> articleTitles = new ArrayList<>();
-                for (Article article : articles) {
-                    articleTitles.add(article.getTitle());
-                }
-                articlesListView.setItems(FXCollections.observableArrayList(articleTitles));
-            });
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+        articlesListView.getItems().setAll(articles);  // Update ListView with loaded titles
     }
+
 
     private void saveReadingHistory(Article article) {
         if (currentUsername != null) {
