@@ -1,3 +1,5 @@
+
+
 package com.example.ood;
 
 import com.google.gson.Gson;
@@ -13,20 +15,13 @@ import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
 import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ListView;
-import javafx.stage.Stage;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -36,14 +31,15 @@ public class ArticlesController {
     @FXML
     private ListView<String> articlesListView; // ListView to display article titles
     @FXML
-    private ComboBox<String> categoryComboBox; // ComboBox for selecting categories
+    private ComboBox<String> categoryComboBox;
+    private String currentUsername; // ComboBox for selecting categories
 
     private final String API_KEY = "72f3769687af4decb26ba81130a9af2a";
-    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=30&apiKey=" + API_KEY;
+    private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=" + API_KEY;
     private final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
-    private String currentUsername; // Store the current user's username
+    private Set<String> existingArticleTitles = new HashSet<>(); // Set to store titles of articles already in CSV
 
     // Define categories and their associated keywords
     private final String[] categories = {"Health", "Artificial Intelligence", "Technology", "Education", "Sports"};
@@ -62,7 +58,7 @@ public class ArticlesController {
         categoryComboBox.setItems(FXCollections.observableArrayList(categories)); // Populate ComboBox
         categoryComboBox.setOnAction(event -> filterArticlesByCategory()); // Set event handler
 
-        // Schedule article fetching every 6 hours
+        // Schedule article fetching every 10 hours
         scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 10, TimeUnit.HOURS);
 
         // Set event listener to load full article content when an item is selected
@@ -73,6 +69,8 @@ public class ArticlesController {
                 saveReadingHistory(selectedArticle); // Save reading history when article is clicked
             }
         });
+
+        loadArticlesFromCSV();  // Load articles from CSV initially
     }
 
     private String categorizeArticle(String title, String content) {
@@ -134,8 +132,6 @@ public class ArticlesController {
         this.currentUsername = username;
     }
 
-
-
     private void fetchArticles() {
         new Thread(() -> {
             try {
@@ -154,7 +150,6 @@ public class ArticlesController {
                 in.close();
 
                 parseAndSaveArticles(response.toString());
-                loadArticlesFromCSV();
 
             } catch (Exception e) {
                 Platform.runLater(() -> showAlert("Error", "Failed to fetch articles. Please try again later."));
@@ -164,12 +159,11 @@ public class ArticlesController {
     }
 
     private void parseAndSaveArticles(String jsonResponse) {
-        articles.clear();
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH, true))) {  // Open in append mode
             for (int i = 0; i < jsonArticles.size(); i++) {
                 JsonObject jsonArticle = jsonArticles.get(i).getAsJsonObject();
                 String title = jsonArticle.has("title") && !jsonArticle.get("title").isJsonNull()
@@ -179,20 +173,31 @@ public class ArticlesController {
                         ? jsonArticle.get("content").getAsString()
                         : "Content not available.";
 
-                String category = categorizeArticle(title, content);
+                // Only add articles that are not already in the CSV
+                if (!existingArticleTitles.contains(title)) {
+                    String category = categorizeArticle(title, content);
 
-                writer.write(String.join(",", title, content, category));
-                writer.newLine();
+                    // Save article to CSV
+                    writer.write(String.join(",", title, content, category));
+                    writer.newLine();
 
-                articles.add(new Article(title, content, category));
+                    // Add to articles list
+                    articles.add(new Article(title, content, category));
+                    existingArticleTitles.add(title);  // Add the article title to the set
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Update ListView
+        Platform.runLater(() -> updateArticlesListView(articles));
     }
 
     private void loadArticlesFromCSV() {
-        List<String> articles = new ArrayList<>();
+        List<String> articleTitles = new ArrayList<>();
+        articles.clear();  // Clear the articles list before loading new articles
+
         try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -201,21 +206,28 @@ public class ArticlesController {
                     continue;
                 }
 
-                String[] parts = line.split(",");
-                if (parts.length > 0) {
+                String[] parts = line.split(",", -1); // Split by comma, and allow empty entries for missing columns
+
+                if (parts.length >= 2) {
                     String title = parts[0].trim();  // Get the title (first column)
-                    title = title.replace("\"", "");  // Remove any quotes around the title
-                    articles.add(title);  // Add the title to the list
+                    String content = parts.length > 1 ? parts[1].trim() : "Content not available";  // Get content (second column)
+                    String category = parts.length > 2 ? parts[2].trim() : "Uncategorized";  // Get category (third column, optional)
+
+                    // Add the article to the list with its real content
+                    articles.add(new Article(title, content, category));
+                    articleTitles.add(title);  // Add the title to the ListView
+                    existingArticleTitles.add(title);  // Add the title to the set of existing articles
                 } else {
-                    System.out.println("Skipping invalid line: " + line);  // Optionally log invalid lines
+                    System.out.println("Skipping invalid line (not enough columns): " + line);
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        articlesListView.getItems().setAll(articles);  // Update ListView with loaded titles
-    }
 
+        // Update ListView with article titles
+        articlesListView.setItems(FXCollections.observableArrayList(articleTitles));
+    }
 
     private void saveReadingHistory(Article article) {
         if (currentUsername != null) {
@@ -225,6 +237,8 @@ public class ArticlesController {
         }
     }
 
+
+
     private void openArticleDetailView(Article article) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
@@ -232,6 +246,8 @@ public class ArticlesController {
 
             ArticleDetailController controller = loader.getController();
             controller.setArticle(article);
+            //controller.setArticle(new Article(article.getTitle(), article.getContent(), null)); // Only set title and content
+
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -255,15 +271,11 @@ public class ArticlesController {
     @FXML
     private void handleBackButton() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
-            Parent root = loader.load();
-
+            Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
             Stage stage = (Stage) articlesListView.getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
-

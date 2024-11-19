@@ -20,37 +20,6 @@ public class AddController {
     @FXML
     private TextField contentTextField;
 
-    /*@FXML
-    private void saveArticle() {
-        String title = titleTextField.getText();
-        String content = contentTextField.getText();
-
-        if (!title.isEmpty() && !content.isEmpty()) {
-            // Save the article to the CSV file
-            try {
-                String filePath = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
-
-                // Create a BufferedWriter to append the article to the CSV file
-                BufferedWriter writer = new BufferedWriter(new FileWriter(filePath, true));
-
-                // Write the article (title and content) to the CSV file
-                writer.write(title + "," + content);
-                writer.newLine();  // Add a new line after each article
-
-                // Close the writer
-                writer.close();
-
-                // Provide feedback
-                System.out.println("Article saved: " + title);
-
-            } catch (IOException e) {
-                System.out.println("An error occurred while saving the article.");
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Please fill in both title and content.");
-        }
-    }*/
 
     @FXML
     private void saveArticle() {

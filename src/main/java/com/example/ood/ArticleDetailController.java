@@ -236,42 +236,6 @@ public class ArticleDetailController {
     }
 
 
-    /*private void updateSkipStatusInCSV(String articleTitle,  String skipStatus) {
-        String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
-        List<String> lines = new ArrayList<>();
-        boolean isUpdated = false;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
-            String line;
-            String username = SessionManager.getCurrentUser().getUsername(); // Get the current logged-in user
-
-            // Read each line and update the matching entry's skip status
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
-
-                if (parts.length >= 4 && parts[0].equals(username) && parts[1].equals(articleTitle)) {
-                    // If a matching entry is found, update the skip status in the fourth column
-                    line = username + "," + articleTitle + "," + parts[1] + "," + skipStatus;
-                    isUpdated = true;  // Mark that we've updated the status
-                }
-                lines.add(line);  // Add each line (updated or not) to the list
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // If an entry was updated, write the updated content back to the CSV
-        if (isUpdated) {
-            try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
-                for (String line : lines) {
-                    bw.write(line);
-                    bw.newLine();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     private void updateSkipStatusInCSV(String articleTitle, String skipStatus) {
         String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
@@ -317,7 +281,7 @@ public class ArticleDetailController {
     public void setArticle(Article article) {
         this.article = article;
         titleLabel.setText(article.getTitle());
-        categoryLabel.setText("Category: " + article.getCategory());
+        //categoryLabel.setText("Category: " + article.getCategory());
         contentLabel.setText(article.getContent());
     }
 
