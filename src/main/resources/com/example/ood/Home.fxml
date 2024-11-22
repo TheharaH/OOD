@@ -10,6 +10,7 @@
 
       <Button fx:id="articlesButton" layoutX="220.0" layoutY="100.0" text="View Articles" onAction="#handleArticlesButton" />
       <Button fx:id="historyButton" layoutX="220.0" layoutY="150.0" text="View Reading History" onAction="#handleHistoryButton" />
-      <Button fx:id="logoutButton" layoutX="220.0" layoutY="200.0" text="logout" onAction="#logout" />
+      <Button fx:id="RecommendationButton" layoutX="220.0" layoutY="200.0" text="For You" onAction="#handleRecommendationButton" />
+      <Button fx:id="logoutButton" layoutX="220.0" layoutY="250.0" text="logout" onAction="#logout" />
    </children>
 </AnchorPane>

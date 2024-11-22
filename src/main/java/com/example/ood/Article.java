@@ -3,13 +3,15 @@ package com.example.ood;
 public class Article {
     private String title;        // Title of the article
     private String content;      // Content of the article
-    private String category;     // Category of the article
+    private String category;
+    //private String username;  // Category of the article
 
     // Constructor
     public Article(String title, String content, String category) {
         this.title = title;
         this.content = content;
         this.category = category;
+        //this.username = username;
     }
 
     // Getters
@@ -24,6 +26,10 @@ public class Article {
     public String getCategory() {
         return category;
     }
+
+    /*public String getUsername() {
+        return username;
+    }*/
 
     // Override equals() to compare articles based on title, content, and category if needed
     @Override

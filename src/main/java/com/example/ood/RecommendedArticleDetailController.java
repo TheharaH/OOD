@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticleDetailController {
+public class RecommendedArticleDetailController {
 
     @FXML
     private Label titleLabel;

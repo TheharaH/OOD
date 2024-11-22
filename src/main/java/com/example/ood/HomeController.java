@@ -125,5 +125,19 @@ public class HomeController {
         }
     }
 
+    @FXML
+    public void handleRecommendationButton() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RecommendedArticle.fxml")); // Path to the reading history FXML
+            Parent root = loader.load();
+
+            // Switch to the reading history scene
+            Stage stage = (Stage) historyButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exceptions
+        }
+    }
 
 }
