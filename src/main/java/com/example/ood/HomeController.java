@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.stage.Stage;
+import javafx.event.ActionEvent;
 
 
 public class HomeController {
@@ -139,5 +140,25 @@ public class HomeController {
             e.printStackTrace(); // Handle exceptions
         }
     }
+
+    @FXML
+    public void loadManageProfile(ActionEvent event) {
+        try {
+            // Load the ManageProfile.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageProfile.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage from the event source (the button)
+            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+
+            // Set the new scene
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
