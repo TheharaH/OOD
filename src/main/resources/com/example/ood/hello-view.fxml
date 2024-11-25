@@ -29,5 +29,5 @@
     </HBox>
 
     <!-- Admin Button Styled as Long and Thin with space -->
-    <Button onAction="#handleAdmin" prefHeight="30.0" prefWidth="750.0" style="-fx-background-color: #000000; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 50px;" text="ADMIN" />
+
 </VBox>

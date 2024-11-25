@@ -33,6 +33,11 @@ public class LoginController {
     private static final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
 
     private User validateLogin(String username, String password) {
+
+        // Check if the user is the admin
+        if (Admin.isAdmin(username, password)) {
+            return new Admin(username, password); // Successful admin login
+        }
         String line;
 
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
@@ -57,7 +62,7 @@ public class LoginController {
     }
 
 
-    @FXML
+    /*@FXML
     public void handleLogin(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -78,7 +83,7 @@ public class LoginController {
         } else {
             errorMessage.setText("Invalid. Please try again");
         }
-    }
+    }*/
 
 
     private void loadHomePage(User user) {
@@ -99,4 +104,71 @@ public class LoginController {
             errorMessage.setText("Failed to load home page.");
         }
     }
+
+    /*private void loadAdminPage(Admin admin) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin.fxml"));
+            Parent adminRoot = loader.load();
+
+            // Get the AdminController and set the Admin object
+            AdminController adminController = loader.getController();
+            adminController.setAdmin(admin);
+
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            Scene adminScene = new Scene(adminRoot);
+            stage.setScene(adminScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorMessage.setText("Failed to load admin page.");
+        }
+    }*/
+
+    @FXML
+    public void handleLogin(ActionEvent event) {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        // Clear previous messages
+        errorMessage.setText("");
+        successMessage.setText("");
+
+        // Validate login credentials
+        User loggedInUser = validateLogin(username, password);
+        if (loggedInUser != null) {
+            successMessage.setText("Successfully logged in!");
+
+            // Set the logged-in user in the session
+            SessionManager.setCurrentUser(loggedInUser);
+
+            // Redirect based on user type
+            if (loggedInUser instanceof Admin) {
+                loadAdminPage((Admin) loggedInUser);
+            } else {
+                loadHomePage(loggedInUser);
+            }
+        } else {
+            errorMessage.setText("Invalid. Please try again");
+        }
+    }
+
+    private void loadAdminPage(Admin admin) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin.fxml"));
+            Parent adminRoot = loader.load();
+
+            // Pass admin information to the admin page controller if needed
+            AdminController adminController = loader.getController();
+
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            Scene adminScene = new Scene(adminRoot);
+            stage.setScene(adminScene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorMessage.setText("Failed to load admin page.");
+        }
+    }
+
+
 }

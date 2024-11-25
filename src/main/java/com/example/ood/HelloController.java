@@ -80,28 +80,6 @@ public class HelloController {
         }
     }
 
-    @FXML
-    public void handleAdmin(ActionEvent event) {
-        try {
-            // Load the AHD.fxml file
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("AdminLogin.fxml"));
-            Parent root = fxmlLoader.load();
 
-            // Create a new scene with the loaded root and set it to the stage
-            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-
-            // Set the controller for the loaded FXML to be AHDController
-            AdminLoginController ahdController = fxmlLoader.getController();
-
-            // Optionally, you can pass any data to the AHDController using its public methods
-
-            // Show the stage
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
 

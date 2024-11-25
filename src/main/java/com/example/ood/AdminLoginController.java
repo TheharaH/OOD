@@ -1,4 +1,4 @@
-package com.example.ood;
+/*package com.example.ood;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,4 +58,4 @@ public class AdminLoginController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-}
+}*/
