@@ -2,16 +2,36 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.HomeController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.HomeController">
    <children>
-      <Label fx:id="welcomeLabel" layoutX="240.0" layoutY="44.0" text="Welcome!" />
+      <!-- Welcome Label -->
+      <Label fx:id="welcomeLabel" layoutX="60.0" layoutY="60.0" prefHeight="40.0" prefWidth="341.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Welcome!" />
 
-      <Button fx:id="articlesButton" layoutX="220.0" layoutY="100.0" text="View Articles" onAction="#handleArticlesButton" />
-      <Button fx:id="historyButton" layoutX="220.0" layoutY="150.0" text="View Reading History" onAction="#handleHistoryButton" />
-      <Button fx:id="RecommendationButton" layoutX="220.0" layoutY="200.0" text="For You" onAction="#handleRecommendationButton" />
-      <Button fx:id="logoutButton" layoutX="220.0" layoutY="300.0" text="logout" onAction="#logout" />
-      <Button fx:id="mangeprofile" layoutX="220.0" layoutY="250.0" text="ManageProfile" onAction="#loadManageProfile" />
+      <!-- Center Image -->
+      <ImageView fx:id="infoEdgeImage" fitHeight="349.0" fitWidth="474.0" layoutX="228.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@infoedge.png" />
+         </image>
+      </ImageView>
+
+      <!-- User Image -->
+      <ImageView fx:id="userImage" fitHeight="69.0" fitWidth="61.0" layoutX="581.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@user.jpg" />
+         </image>
+      </ImageView>
+
+
+
+      <!-- Other Buttons -->
+      <Button fx:id="articlesButton" layoutX="163.0" layoutY="505.0" onAction="#handleArticlesButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Trending Articles" />
+      <Button fx:id="historyButton" layoutX="660.0" layoutY="62.0" onAction="#handleHistoryButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="View History" />
+      <Button fx:id="RecommendationButton" layoutX="528.0" layoutY="505.0" onAction="#handleRecommendationButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Personalized Articles" />
+      <Button fx:id="mangeprofile" layoutX="660.0" layoutY="110.0" onAction="#loadManageProfile" prefWidth="128.0" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Manage Profile" />
+      <Button fx:id="logoutButton" layoutX="660.0" layoutY="18.0" onAction="#logout" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Logout" />
    </children>
 </AnchorPane>

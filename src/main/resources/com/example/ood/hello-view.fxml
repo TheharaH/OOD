@@ -14,16 +14,16 @@
     </padding>
 
     <!-- Catchy Title Text -->
-    <Text style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-fill: #172a75;" text="Best News Headlines!" wrappingWidth="554.5187649726868" />
+    <Text style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #172a75;" text="Best News Headlines!" wrappingWidth="298.9188199043274" />
 
     <!-- Image of the News -->
-    <ImageView fitHeight="263.0" fitWidth="708.0" pickOnBounds="true" preserveRatio="true">
+    <ImageView fitHeight="279.0" fitWidth="399.0" pickOnBounds="true" preserveRatio="true">
         <image>
-            <Image url="@news.jpg" />A
+            <Image url="@news.png" />
         </image>
     </ImageView>
     <!-- Centered Box for Login and Signup Buttons with spacing -->
-    <HBox alignment="CENTER" spacing="40.0">
+    <HBox alignment="CENTER" spacing="25.0">
         <Button onAction="#handleLogin" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;" text="LOGIN" />
         <Button onAction="#handleSignup" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;" text="SIGNUP" />
     </HBox>

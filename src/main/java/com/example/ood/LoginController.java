@@ -76,7 +76,7 @@ public class LoginController {
 
             loadHomePage(loggedInUser);
         } else {
-            errorMessage.setText("Invalid username or password. Please try again.");
+            errorMessage.setText("Invalid. Please try again");
         }
     }
 

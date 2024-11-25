@@ -5,41 +5,53 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.SignUpController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.SignUpController">
     <children>
-        <!-- Username -->
-        <Label layoutX="160.0" layoutY="60.0" text="Username:" />
-        <TextField fx:id="usernameField" layoutX="260.0" layoutY="60.0" prefWidth="200.0" />
+        <!-- Catchy Tagline -->
+        <Text layoutX="227.0" layoutY="58.0" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #172a75;" text="Join Us and Stay Connected!" />
 
-        <!-- Password -->
-        <Label layoutX="160.0" layoutY="100.0" text="Password:" />
-        <PasswordField fx:id="passwordField" layoutX="260.0" layoutY="100.0" prefWidth="200.0" />
+        <!-- VBox for Form Elements -->
+        <VBox layoutX="160.0" layoutY="120.0" spacing="20.0">
+            <!-- Username -->
+            <HBox spacing="120.0">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Username:" />
+                <TextField fx:id="usernameField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
+            </HBox>
 
-        <!-- Confirm Password -->
-        <Label layoutX="160.0" layoutY="140.0" text="Confirm Password:" />
-        <PasswordField fx:id="confirmPasswordField" layoutX="260.0" layoutY="140.0" prefWidth="200.0" />
+            <!-- Password -->
+            <HBox spacing="125.0">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Password:" />
+                <PasswordField fx:id="passwordField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
+            </HBox>
 
-        <!-- Categories Checkboxes -->
-        <Label layoutX="160.0" layoutY="180.0" text="Categories:" />
-        <VBox layoutX="260.0" layoutY="180.0" spacing="5.0">
-            <children>
-                <CheckBox fx:id="category1" text="Technology" />
-                <CheckBox fx:id="category2" text="Health" />
-                <CheckBox fx:id="category3" text="AI" />
-                <CheckBox fx:id="category4" text="Sports" />
-                <CheckBox fx:id="category5" text="Education" />
-            </children>
+            <!-- Confirm Password -->
+            <HBox spacing="60.0">
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Confirm Password:" />
+                <PasswordField fx:id="confirmPasswordField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
+            </HBox>
+
+            <!-- Categories -->
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Categories:" />
+            <HBox spacing="20.0">
+                <CheckBox fx:id="category1" style="-fx-font-size: 16px;" text="Technology" />
+                <CheckBox fx:id="category2" style="-fx-font-size: 16px;" text="Health" />
+                <CheckBox fx:id="category3" style="-fx-font-size: 16px;" text="AI" />
+                <CheckBox fx:id="category4" style="-fx-font-size: 16px;" text="Sports" />
+                <CheckBox fx:id="category5" style="-fx-font-size: 16px;" text="Education" />
+            </HBox>
         </VBox>
 
         <!-- Signup Button -->
-        <Button layoutX="260.0" layoutY="300.0" prefWidth="100.0" text="Sign Up" onAction="#handleSignup" />
+        <Button layoutX="300.0" layoutY="468.0" onAction="#handleSignup" prefWidth="200.0" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;" text="Sign Up" />
 
         <!-- Error Message Label -->
-        <Label fx:id="errorMessage" layoutX="260.0" layoutY="340.0" textFill="red" />
+        <Label fx:id="errorMessage" layoutX="260.0" layoutY="510.0" textFill="red" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
         <!-- Success Message Label -->
-        <Label fx:id="successMessage" layoutX="260.0" layoutY="340.0" textFill="green" />
+        <Label fx:id="successMessage" layoutX="260.0" layoutY="540.0" textFill="green" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
     </children>
 </AnchorPane>
