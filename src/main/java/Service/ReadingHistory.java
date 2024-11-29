@@ -1,4 +1,7 @@
-package com.example.ood;
+package Service;
+
+import Model.Article;
+import Model.User;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +13,7 @@ import java.util.List;
 
 public class ReadingHistory {
     private static List<HistoryEntry> readingHistory = new ArrayList<>();
-    private static final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv"; // Path to CSV file
+    private static final String CSV_FILE_PATH = "reading_history.csv"; // Path to CSV file
 
 
 

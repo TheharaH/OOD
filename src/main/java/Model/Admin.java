@@ -1,4 +1,4 @@
-package com.example.ood;
+package Model;
 
 public class Admin extends User {
 
