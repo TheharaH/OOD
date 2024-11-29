@@ -5,12 +5,20 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="523.0" prefWidth="783.0" spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.AddController">
-   <Label prefHeight="62.0" prefWidth="92.0" text="ADD AN ARTICLE" />
-    <TextField fx:id="titleTextField" prefHeight="62.0" prefWidth="783.0" promptText="Enter article title" />
-    <TextField fx:id="contentTextField" prefHeight="275.0" prefWidth="783.0" promptText="Enter article content" />
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.AddController">
 
-    <!-- Button to save the article -->
-    <Button onAction="#saveArticle" prefHeight="26.0" prefWidth="801.0" text="Save Article" />
-    <Button onAction="#handleBackButton" prefHeight="26.0" prefWidth="783.0" text="Back" />
+    <!-- Header Label -->
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="ADD AN ARTICLE" />
+
+    <!-- Article Title TextField -->
+    <TextField fx:id="titleTextField" prefHeight="50.0" prefWidth="700.0" promptText="Enter article title" style="-fx-font-size: 16px;" />
+
+    <!-- Article Content TextField -->
+    <TextField fx:id="contentTextField" prefHeight="250.0" prefWidth="700.0" promptText="Enter article content" style="-fx-font-size: 16px;" />
+
+    <!-- Save Article Button -->
+    <Button onAction="#saveArticle" prefHeight="40.0" prefWidth="700.0" text="Save Article" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <!-- Back Button -->
+    <Button onAction="#handleBackButton" prefHeight="40.0" prefWidth="700.0" text="Back" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
 </VBox>
