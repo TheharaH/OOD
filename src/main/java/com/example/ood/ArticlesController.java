@@ -234,8 +234,6 @@ public class ArticlesController {
                     articles.add(new Article(title, content, category));
                     articleTitles.add(title);  // Add the title to the ListView
                     existingArticleTitles.add(title);  // Add the title to the set of existing articles
-                } else {
-                    System.out.println("Skipping invalid line (not enough columns): " + line);
                 }
             }
         } catch (IOException e) {
