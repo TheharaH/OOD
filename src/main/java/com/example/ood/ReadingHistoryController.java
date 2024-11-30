@@ -1,5 +1,8 @@
 package com.example.ood;
 
+import Model.User;
+import Service.ReadingHistory;
+import Service.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.collections.FXCollections;
@@ -19,10 +22,10 @@ public class ReadingHistoryController {
     @FXML
     public void initialize() {
         ReadingHistory.loadReadingHistory(); // Load reading history from CSV
-        loadReadingHistory();
+        displayReadingHistory();
     }
 
-    private void loadReadingHistory() {
+    private void displayReadingHistory() {
         List<ReadingHistory.HistoryEntry> entries = ReadingHistory.getReadingHistory();
         List<String> displayEntries = new ArrayList<>();
 
@@ -31,6 +34,10 @@ public class ReadingHistoryController {
         }
 
         historyListView.setItems(FXCollections.observableArrayList(displayEntries));
+        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        if (currentUser != null) {
+            currentUser.viewHistory(); // Pass the article to the viewArticle method
+        }
     }
 
     @FXML

@@ -30,7 +30,7 @@ public class AddController {
             try {
                 //String filePath = "C:\\Users\\User\\Documents\\articles.csv"; // Test path
 
-                String filePath = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
+                String filePath = "articles.csv";
 
                 // Debugging: Print title and content to confirm
                 System.out.println("Title: " + title);

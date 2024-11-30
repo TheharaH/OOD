@@ -16,7 +16,7 @@ public class DeleteController {
     private ListView<String> articleListView;
 
     // File path of the CSV where the articles are stored
-    private static final String FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
+    private static final String FILE_PATH = "articles.csv";
 
     @FXML
     public void initialize() {
@@ -26,54 +26,7 @@ public class DeleteController {
 
     // Load articles from CSV file into ListView
 
-    /*private void loadArticles() {
-        List<String> articles = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Skip empty lines
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
 
-                String[] parts = line.split(",");
-                if (parts.length > 0) {
-                    String title = parts[0];  // Get the title (first column)
-                    articles.add(title);  // Add the title to the list
-                } else {
-                    System.out.println("Skipping invalid line: " + line);  // Optionally log invalid lines
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        articleListView.getItems().setAll(articles);  // Update ListView with loaded titles
-    }*/
-
-    /*private void loadArticles() {
-        List<String> articles = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Skip empty lines
-                if (line.trim().isEmpty()) {
-                    continue;
-                }
-
-                String[] parts = line.split(",");
-                if (parts.length > 0) {
-                    String title = parts[0];  // Get the title (first column)
-                    title = title.replace("\"", "");  // Remove any quotes around the title
-                    articles.add(title);  // Add the title to the list
-                } else {
-                    System.out.println("Skipping invalid line: " + line);  // Optionally log invalid lines
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        articleListView.getItems().setAll(articles);  // Update ListView with loaded titles
-    }*/
 
 
 
@@ -98,39 +51,6 @@ public class DeleteController {
 
     // Delete the article from the CSV file
 
-    /*private void deleteArticleFromCSV(String articleToDelete) {
-        List<String> updatedArticles = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.trim().isEmpty()) {
-                    continue;  // Skip empty lines
-                }
-
-                String[] parts = line.split(",");
-                if (parts.length > 0) {
-                    String title = parts[0];  // Get the title (first column)
-                    if (!title.equals(articleToDelete)) {
-                        updatedArticles.add(line);  // Add line to updated list if title doesn't match
-                    }
-                } else {
-                    System.out.println("Skipping invalid line: " + line);  // Log invalid lines
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Write the updated list back to the CSV file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (String article : updatedArticles) {
-                writer.write(article);
-                writer.newLine();  // Write each article as a new line
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
 
 

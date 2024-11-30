@@ -147,6 +147,10 @@ public class RecommendedArticlesController {
 
 package com.example.ood;
 
+import Model.Article;
+import Model.User;
+import Service.ReadingHistory;
+import Service.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -170,7 +174,7 @@ public class RecommendedArticlesController {
 
     private List<Article> filteredArticles = new ArrayList<>();
 
-    private static final String CSV_FILE_PATH = "D:/2nd Year - Copy/1st sem/OOD/recommended_articles (2).csv";
+    private static final String CSV_FILE_PATH = "recommended_articles (2).csv";
 
     private String currentUsername;
 

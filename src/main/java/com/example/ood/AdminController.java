@@ -68,6 +68,7 @@ public class AdminController {
 
 package com.example.ood;
 
+import Model.Admin;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

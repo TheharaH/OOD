@@ -1,139 +1,11 @@
+
 /*package com.example.ood;
 
-import javafx.fxml.FXML;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
-
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class ManageProfileController {
-
-    @FXML
-    private PasswordField currentPasswordField;
-
-    @FXML
-    private PasswordField newPasswordField;
-
-    @FXML
-    private PasswordField confirmNewPasswordField;
-
-    @FXML
-    private TextField preferencesField;
-
-    @FXML
-    private Label errorMessage;
-
-    @FXML
-    private Label successMessage;
-
-    private final String filePath = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
-
-    // Handle updating the user profile
-    public void handleUpdate() {
-        errorMessage.setText("");
-        successMessage.setText("");
-
-        String currentPassword = currentPasswordField.getText();
-        String newPassword = newPasswordField.getText();
-        String confirmNewPassword = confirmNewPasswordField.getText();
-        String newPreferences = preferencesField.getText();
-
-        if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
-            errorMessage.setText("All password fields are required.");
-            return;
-        }
-
-        if (!newPassword.equals(confirmNewPassword)) {
-            errorMessage.setText("New passwords do not match.");
-            return;
-        }
-
-        String username = SessionManager.getCurrentUser().getUsername(); // Get the username from the session
-        if (username == null) {
-            errorMessage.setText("User not logged in.");
-            return;
-        }
-
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
-            List<String> updatedLines = new ArrayList<>();
-
-            boolean found = false;
-            for (String line : lines) {
-                String[] parts = line.split(",");
-                if (parts.length < 3) continue;
-
-                String fileUsername = parts[0];
-                String filePassword = parts[1];
-                String filePreferences = parts[2];
-
-                if (fileUsername.equals(username)) {
-                    found = true;
-                    if (!filePassword.equals(currentPassword)) {
-                        errorMessage.setText("Current password is incorrect.");
-                        return;
-                    }
-                    updatedLines.add(fileUsername + "," + newPassword + "," + (newPreferences.isEmpty() ? filePreferences : newPreferences));
-                } else {
-                    updatedLines.add(line);
-                }
-            }
-
-            if (!found) {
-                errorMessage.setText("User not found in the file.");
-                return;
-            }
-
-            Files.write(Paths.get(filePath), updatedLines);
-            successMessage.setText("Profile updated successfully!");
-
-        } catch (IOException e) {
-            errorMessage.setText("Error updating the file.");
-            e.printStackTrace();
-        }
-    }
-
-    // Handle the Back button press
-    public void handleBack() {
-        try {
-            // Load the Home.fxml scene
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
-            Parent root = loader.load();
-
-            // Get the current stage and set the scene to Home.fxml
-            Stage stage = (Stage) currentPasswordField.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}*/
-package com.example.ood;
-
+import Model.User;
+import Service.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -172,12 +44,23 @@ public class ManageProfileController {
     @FXML
     private Label successMessage;
 
-    private final String filePath = "D:\\2nd Year - Copy\\1st sem\\OOD\\login_details_50_rows.csv";
+    private final String filePath = "login_details_50_rows.csv";
+
+
+    private void displayMessage(String message, boolean isSuccess) {
+        if (isSuccess) {
+            successMessage.setText(message);
+            errorMessage.setText("");
+        } else {
+            errorMessage.setText(message);
+            successMessage.setText("");
+        }
+    }
 
     // Handle updating the user profile
     public void handleUpdate() {
-        errorMessage.setText("");
-        successMessage.setText("");
+        displayMessage("", true); // Clear previous messages
+        displayMessage("", false);
 
         String currentPassword = currentPasswordField.getText();
         String newPassword = newPasswordField.getText();
@@ -194,18 +77,18 @@ public class ManageProfileController {
         String newPreferences = String.join(";", selectedPreferences);
 
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
-            errorMessage.setText("All password fields are required.");
+            displayMessage("All password fields are required.", false);
             return;
         }
 
         if (!newPassword.equals(confirmNewPassword)) {
-            errorMessage.setText("New passwords do not match.");
+            displayMessage("New passwords do not match.", false);
             return;
         }
 
         String username = SessionManager.getCurrentUser().getUsername(); // Get the username from the session
         if (username == null) {
-            errorMessage.setText("User not logged in.");
+            displayMessage("User not logged in.", false);
             return;
         }
 
@@ -225,7 +108,7 @@ public class ManageProfileController {
                 if (fileUsername.equals(username)) {
                     found = true;
                     if (!filePassword.equals(currentPassword)) {
-                        errorMessage.setText("Current password is incorrect.");
+                        displayMessage("Current password is incorrect.", false);
                         return;
                     }
                     updatedLines.add(fileUsername + "," + newPassword + "," + (newPreferences.isEmpty() ? filePreferences : newPreferences));
@@ -235,15 +118,15 @@ public class ManageProfileController {
             }
 
             if (!found) {
-                errorMessage.setText("User not found in the file.");
+                displayMessage("User not found in the file.", false);
                 return;
             }
 
             Files.write(Paths.get(filePath), updatedLines);
-            successMessage.setText("Profile updated successfully!");
+            displayMessage("Profile updated successfully!", true);
 
         } catch (IOException e) {
-            errorMessage.setText("Error updating the file.");
+            displayMessage("Error updating the file.", false);
             e.printStackTrace();
         }
     }
@@ -262,7 +145,174 @@ public class ManageProfileController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            displayMessage("Error loading the Home page.", false);
         }
     }
 }
+*/
 
+package com.example.ood;
+
+import Model.User;
+import Service.SessionManager;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ManageProfileController {
+
+    @FXML
+    private PasswordField currentPasswordField;
+
+    @FXML
+    private PasswordField newPasswordField;
+
+    @FXML
+    private PasswordField confirmNewPasswordField;
+
+    @FXML
+    private CheckBox category1; // Technology
+    @FXML
+    private CheckBox category2; // Health
+    @FXML
+    private CheckBox category3; // AI
+    @FXML
+    private CheckBox category4; // Sports
+    @FXML
+    private CheckBox category5; // Education
+
+    @FXML
+    private Label errorMessage;
+
+    @FXML
+    private Label successMessage;
+
+    private final String filePath = "login_details_50_rows.csv";
+
+    /**
+     * Display a common error or success message.
+     * @param message The message to display.
+     * @param isSuccess True if it is a success message, false if it is an error.
+     */
+    private void displayMessage(String message, boolean isSuccess) {
+        if (isSuccess) {
+            successMessage.setText(message);
+            errorMessage.setText("");
+        } else {
+            errorMessage.setText(message);
+            successMessage.setText("");
+        }
+    }
+
+    // Handle updating the user profile
+    public void handleUpdate() {
+        displayMessage("", true); // Clear previous messages
+        displayMessage("", false);
+
+        String currentPassword = currentPasswordField.getText();
+        String newPassword = newPasswordField.getText();
+        String confirmNewPassword = confirmNewPasswordField.getText();
+
+        // Collect selected preferences
+        List<String> selectedPreferences = new ArrayList<>();
+        if (category1.isSelected()) selectedPreferences.add("Technology");
+        if (category2.isSelected()) selectedPreferences.add("Health");
+        if (category3.isSelected()) selectedPreferences.add("AI");
+        if (category4.isSelected()) selectedPreferences.add("Sports");
+        if (category5.isSelected()) selectedPreferences.add("Education");
+
+        String newPreferences = String.join(";", selectedPreferences);
+
+        if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
+            displayMessage("All password fields are required.", false);
+            return;
+        }
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            displayMessage("New passwords do not match.", false);
+            return;
+        }
+
+        String username = SessionManager.getCurrentUser().getUsername(); // Get the username from the session
+        if (username == null) {
+            displayMessage("User not logged in.", false);
+            return;
+        }
+
+        updateUserData(username, currentPassword, newPassword, newPreferences);
+    }
+
+    /**
+     * Updates the user data in the CSV file.
+     * @param username The username of the user.
+     * @param currentPassword The current password of the user.
+     * @param newPassword The new password for the user.
+     * @param newPreferences The new preferences for the user.
+     */
+    private void updateUserData(String username, String currentPassword, String newPassword, String newPreferences) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            List<String> updatedLines = new ArrayList<>();
+
+            boolean found = false;
+            for (String line : lines) {
+                String[] parts = line.split(",");
+                if (parts.length < 3) continue;
+
+                String fileUsername = parts[0];
+                String filePassword = parts[1];
+                String filePreferences = parts[2];
+
+                if (fileUsername.equals(username)) {
+                    found = true;
+                    if (!filePassword.equals(currentPassword)) {
+                        displayMessage("Current password is incorrect.", false);
+                        return;
+                    }
+                    updatedLines.add(fileUsername + "," + newPassword + "," + (newPreferences.isEmpty() ? filePreferences : newPreferences));
+                } else {
+                    updatedLines.add(line);
+                }
+            }
+
+            if (!found) {
+                displayMessage("User not found in the file.", false);
+                return;
+            }
+
+            Files.write(Paths.get(filePath), updatedLines);
+            displayMessage("Profile updated successfully!", true);
+
+        } catch (IOException e) {
+            displayMessage("Error updating the file.", false);
+            e.printStackTrace();
+        }
+    }
+
+    // Handle the Back button press
+    public void handleBack() {
+        try {
+            // Load the Home.fxml scene
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
+            Parent root = loader.load();
+
+            // Get the current stage and set the scene to Home.fxml
+            Stage stage = (Stage) currentPasswordField.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            displayMessage("Error loading the Home page.", false);
+        }
+    }
+}

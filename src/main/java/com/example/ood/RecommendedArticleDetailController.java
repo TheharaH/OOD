@@ -2,6 +2,9 @@
 
 package com.example.ood;
 
+import Model.Article;
+import Model.User;
+import Service.SessionManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -16,6 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+//import static Service.SessionManager.currentUser;
 
 public class RecommendedArticleDetailController {
 
@@ -78,7 +83,7 @@ public class RecommendedArticleDetailController {
 
     // Update like or skip status in the CSV
     private void updateLikeStatusInCSV(String articleTitle, String likeStatus) {
-        String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
+        String CSV_FILE_PATH = "reading_history.csv";
         List<String> lines = new ArrayList<>();
         boolean isUpdated = false;
 
@@ -111,12 +116,17 @@ public class RecommendedArticleDetailController {
                 e.printStackTrace();
             }
         }
+
+        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        if (currentUser != null) {
+            currentUser.likeArticle(); // Pass the article to the viewArticle method
+        }
     }
 
 
 
     private void updateSkipStatusInCSV(String articleTitle, String skipStatus) {
-        String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\reading_history.csv";
+        String CSV_FILE_PATH = "reading_history.csv";
         List<String> lines = new ArrayList<>();
         boolean isUpdated = false;
 
@@ -151,6 +161,11 @@ public class RecommendedArticleDetailController {
                 e.printStackTrace();
             }
         }
+
+        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        if (currentUser != null) {
+            currentUser.skipArticle(); // Pass the article to the viewArticle method
+        }
     }
 
 
@@ -161,6 +176,10 @@ public class RecommendedArticleDetailController {
         titleLabel.setText(article.getTitle());
         //categoryLabel.setText("Category: " + article.getCategory());
         contentLabel.setText(article.getContent());
+        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        if (currentUser != null) {
+            currentUser.viewArticle(article); // Pass the article to the viewArticle method
+        }
     }
 
     // Back button to return to the main view

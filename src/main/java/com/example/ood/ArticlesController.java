@@ -1,6 +1,8 @@
 
 package com.example.ood;
 
+import Model.Article;
+import Service.ReadingHistory;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -35,7 +37,7 @@ public class ArticlesController {
 
     private final String API_KEY = "72f3769687af4decb26ba81130a9af2a";
     private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=" + API_KEY;
-    private final String CSV_FILE_PATH = "D:\\2nd Year - Copy\\1st sem\\OOD\\articles.csv";
+    private final String CSV_FILE_PATH = "articles.csv";
 
     private List<Article> articles = new ArrayList<>();  // List to store full article details
     private Set<String> existingArticleTitles = new HashSet<>(); // Set to store titles of articles already in CSV

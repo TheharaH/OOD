@@ -6,4 +6,8 @@ module com.example.ood {
 
     opens com.example.ood to javafx.fxml;
     exports com.example.ood;
+    exports Model;
+    opens Model to javafx.fxml;
+    exports Service;
+    opens Service to javafx.fxml;
 }
