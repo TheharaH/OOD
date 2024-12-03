@@ -3,14 +3,14 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.DeleteController">
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.DeleteController">
 
     <!-- List of Articles to Select for Deletion -->
     <ListView fx:id="articleListView" prefHeight="350.0" prefWidth="700.0" style="-fx-font-size: 16px;" />
 
     <!-- Button to Delete the Selected Article -->
-    <Button text="Delete Article" onAction="#deleteArticle" prefHeight="40.0" prefWidth="700.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+    <Button text="Delete Article" onAction="#deleteArticle" prefHeight="40.0" prefWidth="700.0" style="-fx-background-color: #ff8080; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
 
     <!-- Back Button to Return to the Admin Page -->
-    <Button text="Back" onAction="#handleBackButton" prefHeight="40.0" prefWidth="700.0" style="-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
+    <Button text="Back" onAction="#handleBackButton" prefHeight="40.0" prefWidth="700.0" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
 </VBox>
