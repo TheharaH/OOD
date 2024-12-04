@@ -14,21 +14,12 @@ public class DeleteController {
 
     @FXML
     private ListView<String> articleListView;
-
-    // File path of the CSV where the articles are stored
     private static final String FILE_PATH = "articles.csv";
 
     @FXML
     public void initialize() {
-        // Load articles from the CSV into the ListView
-        loadArticles();
+        loadArticles(); // Load articles from the CSV into the ListView
     }
-
-    // Load articles from CSV file into ListView
-
-
-
-
 
     // Delete the selected article
     @FXML
@@ -36,23 +27,12 @@ public class DeleteController {
         String selectedArticle = articleListView.getSelectionModel().getSelectedItem();
 
         if (selectedArticle != null) {
-            // Perform deletion
-            System.out.println("Deleting article: " + selectedArticle);
-
-            // Remove from the ListView
-            articleListView.getItems().remove(selectedArticle);
-
-            // Remove from the CSV file
-            deleteArticleFromCSV(selectedArticle);
+            articleListView.getItems().remove(selectedArticle); // Remove from the ListView
+            deleteArticleFromCSV(selectedArticle); // Remove from the CSV file
         } else {
             System.out.println("Please select an article to delete.");
         }
     }
-
-    // Delete the article from the CSV file
-
-
-
 
     // Load articles from CSV and remove quotes around the titles
     private void loadArticles() {
@@ -67,11 +47,11 @@ public class DeleteController {
 
                 String[] parts = line.split(",");
                 if (parts.length > 0) {
-                    String title = parts[0].trim();  // Get the title (first column)
+                    String title = parts[0].trim();  // Get the title
                     title = title.replace("\"", "");  // Remove any quotes around the title
                     articles.add(title);  // Add the title to the list
                 } else {
-                    System.out.println("Skipping invalid line: " + line);  // Optionally log invalid lines
+                    System.out.print("");
                 }
             }
         } catch (IOException e) {
@@ -92,14 +72,14 @@ public class DeleteController {
 
                 String[] parts = line.split(",");
                 if (parts.length > 0) {
-                    String title = parts[0].trim();  // Get the title and trim any leading/trailing spaces
+                    String title = parts[0].trim();  // Get the title and trim
                     articleToDelete = articleToDelete.trim();  // Trim the selected article title
                     title = title.replace("\"", "");  // Remove quotes from the title in the CSV
                     if (!title.equals(articleToDelete)) {
-                        updatedArticles.add(line);  // Add line to updated list if title doesn't match
+                        updatedArticles.add(line);
                     }
                 } else {
-                    System.out.println("Skipping invalid line: " + line);  // Log invalid lines
+                    System.out.println("Skipping invalid line: " + line);
                 }
             }
         } catch (IOException e) {
@@ -120,11 +100,9 @@ public class DeleteController {
     @FXML
     private void handleBackButton() {
         try {
-            // Load the adminfxml.fxml (go back to the admin screen)
+            // Load the admin page
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage (window) and set the scene to admin screen
             Stage stage = (Stage) articleListView.getScene().getWindow(); // You can use any control's scene
             stage.setScene(new Scene(root));
             stage.show();

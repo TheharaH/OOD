@@ -5,7 +5,7 @@ import Model.User;
 public class SessionManager {
     private static User currentUser;
 
-    // Set the current user in the session (this is only done once after login)
+    // Set the current user in the session
     public static void setCurrentUser(User user) {
         if (user != null) {
             currentUser = user;

@@ -22,10 +22,10 @@ public class ReadingHistoryController {
     @FXML
     public void initialize() {
         ReadingHistory.loadReadingHistory(); // Load reading history from CSV
-        displayReadingHistory();
+        displayReadHistory();
     }
 
-    private void displayReadingHistory() {
+    private void displayReadHistory() {
         List<ReadingHistory.HistoryEntry> entries = ReadingHistory.getReadingHistory();
         List<String> displayEntries = new ArrayList<>();
 
@@ -34,9 +34,9 @@ public class ReadingHistoryController {
         }
 
         historyListView.setItems(FXCollections.observableArrayList(displayEntries));
-        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        User currentUser = SessionManager.getCurrentUser();
         if (currentUser != null) {
-            currentUser.viewHistory(); // Pass the article to the viewArticle method
+            currentUser.viewHistory();
         }
     }
 
@@ -45,7 +45,6 @@ public class ReadingHistoryController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
             Parent root = loader.load();
-
             Stage stage = (Stage) historyListView.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

@@ -1,5 +1,3 @@
-
-
 package com.example.ood;
 
 import Model.Article;
@@ -20,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//import static Service.SessionManager.currentUser;
 
 public class RecommendedArticleDetailController {
 
@@ -45,14 +42,14 @@ public class RecommendedArticleDetailController {
 
     private Article article;
 
-    // Called when the "Like" button is clicked
+    // Called when the Like button is clicked
     @FXML
     private void handleLikeButton() {
         // Toggle like status
         liked = !liked;
-        likeButton.setText(liked ? "Liked" : "Like");  // Update button text
+        likeButton.setText(liked ? "Liked" : "Like");
 
-        // Disable the "Like" button and enable the "Skip" button
+        // Disable the Like button and enable the Skip button
         likeButton.setDisable(false);
         skipButton.setDisable(true);
 
@@ -62,7 +59,7 @@ public class RecommendedArticleDetailController {
         updateLikeStatusInCSV(title, likeStatus);
     }
 
-    // Called when the "Skip" button is clicked
+    // Called when the Skip button is clicked
     @FXML
     private void handleSkipButton() {
 
@@ -70,18 +67,17 @@ public class RecommendedArticleDetailController {
         skipButton.setText(skiped ? "Skiped" : "skip");  // Update button text
 
 
-        // Disable the "Skip" button and enable the "Like" button
+        // Disable the Skip button and enable the Like button
         skipButton.setDisable(false);
         likeButton.setDisable(true);
 
         // Save the skip status to the CSV
         String title = titleLabel.getText();
         String skipStatus = skiped ? "skip" : "didn't skip";
-        //String likeStatus = skiped ? "like" : "didn't like";
         updateSkipStatusInCSV(title, skipStatus);
     }
 
-    // Update like or skip status in the CSV
+    // Update like  status in the CSV
     private void updateLikeStatusInCSV(String articleTitle, String likeStatus) {
         String CSV_FILE_PATH = "reading_history.csv";
         List<String> lines = new ArrayList<>();
@@ -89,17 +85,17 @@ public class RecommendedArticleDetailController {
 
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
-            String username = SessionManager.getCurrentUser().getUsername(); // Get the current logged-in user
+            String username = SessionManager.getCurrentUser().getUsername(); // Get the current login user
 
             // Read each line and update the matching entry's like status
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 3 && parts[0].equals(username) && parts[1].equals(articleTitle)) {
                     // If a matching entry is found, update the like status
-                    line = username + "," + articleTitle + "," + likeStatus;
-                    isUpdated = true;  // Mark that we've updated the status
+                    line = username + "," + articleTitle + "," + likeStatus; // Update like status
+                    isUpdated = true;
                 }
-                lines.add(line);  // Add each line (updated or not) to the list
+                lines.add(line);  // Add each line updated or not to the list
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,14 +113,15 @@ public class RecommendedArticleDetailController {
             }
         }
 
-        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        User currentUser = SessionManager.getCurrentUser();
         if (currentUser != null) {
-            currentUser.likeArticle(); // Pass the article to the viewArticle method
+            currentUser.likeArticle();
         }
     }
 
 
 
+    // Update skip status in the CSV
     private void updateSkipStatusInCSV(String articleTitle, String skipStatus) {
         String CSV_FILE_PATH = "reading_history.csv";
         List<String> lines = new ArrayList<>();
@@ -132,7 +129,7 @@ public class RecommendedArticleDetailController {
 
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
-            String username = SessionManager.getCurrentUser().getUsername(); // Get the current logged-in user
+            String username = SessionManager.getCurrentUser().getUsername(); // Get the current loggin user
 
             // Read each line and update the matching entry's skip status
             while ((line = br.readLine()) != null) {
@@ -162,9 +159,9 @@ public class RecommendedArticleDetailController {
             }
         }
 
-        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        User currentUser = SessionManager.getCurrentUser();
         if (currentUser != null) {
-            currentUser.skipArticle(); // Pass the article to the viewArticle method
+            currentUser.skipArticle();
         }
     }
 
@@ -174,11 +171,10 @@ public class RecommendedArticleDetailController {
     public void setArticle(Article article) {
         this.article = article;
         titleLabel.setText(article.getTitle());
-        //categoryLabel.setText("Category: " + article.getCategory());
         contentLabel.setText(article.getContent());
-        User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+        User currentUser = SessionManager.getCurrentUser();
         if (currentUser != null) {
-            currentUser.viewArticle(article); // Pass the article to the viewArticle method
+            currentUser.viewArticle(article);
         }
     }
 
@@ -188,7 +184,6 @@ public class RecommendedArticleDetailController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml")); // Main articles view
             Parent root = loader.load();
-
             Stage stage = (Stage) titleLabel.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();

@@ -1,5 +1,3 @@
-
-
 package com.example.ood;
 
 import Model.User;
@@ -60,7 +58,7 @@ public class ManageProfileController {
 
     // Handle updating the user profile
     public void handleUpdate() {
-        displayMessage("", true); // Clear previous messages
+        displayMessage("", true);
         displayMessage("", false);
 
         String currentPassword = currentPasswordField.getText();
@@ -75,19 +73,22 @@ public class ManageProfileController {
         if (category4.isSelected()) selectedPreferences.add("Sports");
         if (category5.isSelected()) selectedPreferences.add("Education");
 
+        // Join preferences into a single string
         String newPreferences = String.join(";", selectedPreferences);
 
+        // Validation checks for input fields
         if (currentPassword.isEmpty() || newPassword.isEmpty() || confirmNewPassword.isEmpty()) {
             displayMessage("All password fields are required.", false);
             return;
         }
 
+        // Check if the new passwords match
         if (!newPassword.equals(confirmNewPassword)) {
             displayMessage("New passwords do not match.", false);
             return;
         }
 
-        String username = SessionManager.getCurrentUser().getUsername(); // Get the username from the session
+        String username = SessionManager.getCurrentUser().getUsername(); // Get the username
         if (username == null) {
             displayMessage("User not logged in.", false);
             return;
@@ -96,10 +97,10 @@ public class ManageProfileController {
         updateUserData(username, currentPassword, newPassword, newPreferences);
     }
 
-
+    // Method to update the user data in the CSV file
     private void updateUserData(String username, String currentPassword, String newPassword, String newPreferences) {
         try {
-            List<String> lines = Files.readAllLines(Paths.get(filePath));
+            List<String> lines = Files.readAllLines(Paths.get(filePath)); // Read the current data from the CSV file
             List<String> updatedLines = new ArrayList<>();
 
             boolean found = false;
@@ -111,9 +112,9 @@ public class ManageProfileController {
                 String filePassword = parts[1];
                 String filePreferences = parts[2];
 
-                if (fileUsername.equals(username)) {
+                if (fileUsername.equals(username)) { // Check if the username matches
                     found = true;
-                    if (!filePassword.equals(currentPassword)) {
+                    if (!filePassword.equals(currentPassword)) { // Validate current password
                         displayMessage("Current password is incorrect.", false);
                         return;
                     }
@@ -128,27 +129,25 @@ public class ManageProfileController {
                 return;
             }
 
+            // Write the updated data back to the CSV file
             Files.write(Paths.get(filePath), updatedLines);
             displayMessage("Profile updated successfully!", true);
-            User currentUser = SessionManager.getCurrentUser(); // Assuming you have a SessionManager that provides the current user
+            User currentUser = SessionManager.getCurrentUser();
             if (currentUser != null) {
-                currentUser.manageProfile(); // Pass the article to the viewArticle method
+                currentUser.manageProfile();
             }
-
         } catch (IOException e) {
             displayMessage("Error updating the file.", false);
             e.printStackTrace();
         }
     }
 
-    // Handle the Back button press
+
     public void handleBack() {
         try {
             // Load the Home.fxml scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Home.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage and set the scene to Home.fxml
             Stage stage = (Stage) currentPasswordField.getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);

@@ -13,13 +13,13 @@ import java.util.List;
 
 public class ReadingHistory {
     private static List<HistoryEntry> readingHistory = new ArrayList<>();
-    private static final String CSV_FILE_PATH = "reading_history.csv"; // Path to CSV file
+    private static final String CSV_FILE_PATH = "reading_history.csv";
 
 
 
 
     public static void addArticle(String username, Article article) {
-        // Default the likeStatus to "didn't like"
+        // Default likeStatus  "didn't like" and skip status "didn't skip"
         HistoryEntry entry = new HistoryEntry(username, article.getTitle(), "didn't like", "didn't skip");
         readingHistory.add(entry);
         saveToCSV(entry);
@@ -31,18 +31,14 @@ public class ReadingHistory {
 
 
     public static void loadReadingHistory() {
-        // Clear previous history to avoid duplicates on reload
-        readingHistory.clear();
+        readingHistory.clear();// Clear previous history to avoid duplicates on reload
 
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
-            // Get the current user from the session
             User currentUser = SessionManager.getCurrentUser();
-
-            // Check if the current user is null before processing history
-            if (currentUser == null) {
+            if (currentUser == null) { // Check if the current user is null
                 System.out.println("No user is currently logged in.");
-                return;  // Exit if no user is logged in
+                return;
             }
 
             // Loop through each line in the file
@@ -52,12 +48,9 @@ public class ReadingHistory {
                     String username = parts[0];
                     String articleTitle = parts[1];
 
-                    // Set a default value for likeStatus (for example, "didn't like")
                     String likeStatus = "didn't like";
-                    String skipStatus = "didn't skip";  // Default value
-// Default value
+                    String skipStatus = "didn't skip";
 
-                    // Only add history entries for the current user
                     if (username.equals(currentUser.getUsername())) {
                         readingHistory.add(new HistoryEntry(username, articleTitle, likeStatus, skipStatus));
                     }
@@ -71,6 +64,7 @@ public class ReadingHistory {
 
 
 
+    // method to save a reading history entry to the CSV file
     private static void saveToCSV(HistoryEntry entry) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(CSV_FILE_PATH, true))) {
             String username = entry.getUsername();
@@ -91,16 +85,15 @@ public class ReadingHistory {
     }
 
 
-    // Inner class to represent a history entry
 
     public static class HistoryEntry {
         private String username;
         private String articleTitle;
         private String likeStatus;
-        private String skipStatus;  // Field to store the like status
-        // Field to store the like status
+        private String skipStatus;
 
-        // Constructor
+
+
         public HistoryEntry(String username, String articleTitle, String likeStatus, String skipStatus) {
             this.username = username;
             this.articleTitle = articleTitle;
@@ -108,33 +101,21 @@ public class ReadingHistory {
             this.skipStatus = skipStatus;
         }
 
-        // Getter for username
+
         public String getUsername() {
             return username;
         }
 
-        // Getter for articleTitle
         public String getArticleTitle() {
             return articleTitle;
         }
 
-        // Getter for likeStatus
         public String getLikeStatus() {
             return likeStatus;
         }
 
-        // Setter for likeStatus
-        public void setLikeStatus(String likeStatus) {
-            this.likeStatus = likeStatus;
-        }
-
         public String getSkipStatus() {
             return skipStatus;
-        }
-
-
-        public void setSkipStatus(String skipStatus) {
-            this.skipStatus = skipStatus;
         }
     }
 }

@@ -1,6 +1,3 @@
-
-
-
 package com.example.ood;
 
 import Model.Article;
@@ -30,7 +27,7 @@ public class RecommendedArticlesController {
 
     private List<Article> filteredArticles = new ArrayList<>();
 
-    private static final String CSV_FILE_PATH = "recommended_articles (6).csv";
+    private static final String CSV_FILE_PATH = "recommended_articles (1).csv";
 
     private String currentUsername;
 
@@ -45,12 +42,11 @@ public class RecommendedArticlesController {
             System.out.println("No user is currently logged in.");
         }
 
-        // Add a listener for selection changes in the ListView
         articlesListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null && newVal.intValue() >= 0) {
                 Article selectedArticle = filteredArticles.get(newVal.intValue());
-                openArticleDetailView(selectedArticle);
-                saveReadingHistory(selectedArticle); // Save reading history when article is clicked
+                openArticleDetailView(selectedArticle); // Open the detailed view of the selected article
+                saveReadingHistory(selectedArticle); // Save article in  reading history when an article is clicked
             }
         });
     }
@@ -68,6 +64,7 @@ public class RecommendedArticlesController {
         }
     }
 
+    // Get the article object by its title and returnn the content
     private Article getArticleByTitle(String title) {
         for (Article article : filteredArticles) {
             if (article.getTitle().equals(title)) {
@@ -80,10 +77,8 @@ public class RecommendedArticlesController {
 
     public void loadRecommendedArticles() {
         filteredArticles.clear();
-
         try (BufferedReader br = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
             String line;
-
             if (currentUsername == null) {
                 System.out.println("No user is currently logged in.");
                 return;
@@ -95,7 +90,7 @@ public class RecommendedArticlesController {
                     String username = parts[0].trim();
                     String articleTitle = parts[1].trim();
                     String articleContent = parts[2].trim();
-
+                    // If the article is for the current user, add it to the filtered articles list
                     if (username.equals(currentUsername)) {
                         filteredArticles.add(new Article(articleTitle, articleContent, username));
                     }
@@ -106,15 +101,17 @@ public class RecommendedArticlesController {
         }
     }
 
+    // Update the ListView with article titles
     private void updateArticlesListView() {
         List<String> articleTitles = new ArrayList<>();
         for (Article article : filteredArticles) {
-            articleTitles.add(article.getTitle());
+            articleTitles.add(article.getTitle()); // Add article titles to the list
         }
         ObservableList<String> observableTitles = FXCollections.observableArrayList(articleTitles);
         articlesListView.setItems(observableTitles);
     }
 
+    // Save the article to the user history
     private void saveReadingHistory(Article article) {
         if (currentUsername != null) {
             ReadingHistory.addArticle(currentUsername, article);
@@ -123,18 +120,16 @@ public class RecommendedArticlesController {
         }
     }
 
+    // Open the detailed view of the selected article
     private void openArticleDetailView(Article article) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RecommendedArticleDetail.fxml"));
             Parent root = loader.load();
-
             RecommendedArticleDetailController controller = loader.getController();
             controller.setArticle(article);
-
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
-
             Stage currentStage = (Stage) articlesListView.getScene().getWindow();
             currentStage.close();
         } catch (Exception e) {
@@ -145,14 +140,9 @@ public class RecommendedArticlesController {
     @FXML
     private void handleBackButton() {
         try {
-            // Load the FXML file for the home view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage from the back button's scene
             Stage currentStage = (Stage) articlesListView.getScene().getWindow();
-
-            // Set the new scene
             currentStage.setScene(new Scene(root));
             currentStage.show();
         } catch (IOException e) {

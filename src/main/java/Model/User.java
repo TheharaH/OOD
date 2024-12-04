@@ -6,7 +6,7 @@ import java.util.List;
 public class User {
     private String username;
     private String password;
-    private List<String> preferences; // Preferences for recommendations
+    private List<String> preferences;
     private List<Article> readArticles; // Articles the user has read
 
     // Constructor
@@ -17,7 +17,7 @@ public class User {
         this.readArticles = new ArrayList<>(); // Initialize the read articles list
     }
 
-    // Getters
+
     public String getUsername() {
         return username;
     }
@@ -33,9 +33,6 @@ public class User {
     public void viewArticle(Article article) {
         System.out.println(username + " viewed article: ");
         System.out.println("Title: " + article.getTitle());
-
-
-        // Optionally, you can add the article to the list of read articles
         readArticles.add(article);
     }
 

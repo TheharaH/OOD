@@ -28,28 +28,17 @@ public class HelloController {
 
     private String currentUsername;
 
-    // You can set the username via a setter method, constructor, or directly
-    public void setCurrentUsername(String username) {
-        this.currentUsername = username;
-    }
+
     @FXML
     public void handleLogin(ActionEvent event) {
         try {
-            // Load the AHD.fxml file
+
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Login.fxml"));
             Parent root = fxmlLoader.load();
-
-            // Create a new scene with the loaded root and set it to the stage
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-
-            // Set the controller for the loaded FXML to be AHDController
-            LoginController ahdController = fxmlLoader.getController();
-
-            // Optionally, you can pass any data to the AHDController using its public methods
-
-            // Show the stage
+            LoginController Controller = fxmlLoader.getController();
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,21 +48,12 @@ public class HelloController {
     @FXML
     public void handleSignup(ActionEvent event) {
         try {
-            // Load the AHD.fxml file
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SignUp.fxml"));
             Parent root = fxmlLoader.load();
-
-            // Create a new scene with the loaded root and set it to the stage
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
             stage.setScene(scene);
-
-            // Set the controller for the loaded FXML to be AHDController
-            SignUpController ahdController = fxmlLoader.getController();
-
-            // Optionally, you can pass any data to the AHDController using its public methods
-
-            // Show the stage
+            SignUpController Controller = fxmlLoader.getController();
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

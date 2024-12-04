@@ -31,49 +31,25 @@ public class HomeController {
 
     // Method to set the user and update the welcome message
     public void setUser(User user) {
-        if (user != null) {
-            welcomeLabel.setText("Welcome, " + user.getUsername() + "!"); // Set the text for the label
-        } else {
-            welcomeLabel.setText("Welcome!"); // Default welcome message
-        }
+        welcomeLabel.setText("Welcome!");
     }
 
-    // Handle button click to load the articles page
-    /*@FXML
-    public void handleArticlesButton() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("articles.fxml")); // Path to your articles FXML
-            Parent root = loader.load();
 
-            // Switch to the articles scene
-            Stage stage = (Stage) articlesButton.getScene().getWindow(); // Get the current stage
-            stage.setScene(new Scene(root)); // Switch to the articles scene
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace(); // Handle exceptions
-        }
-    }*/
     @FXML
     public void handleArticlesButton() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("articles.fxml")); // Path to your articles FXML
             Parent root = loader.load();
-
-            // Get the controller associated with the FXML
             ArticlesController articlesController = loader.getController();
-
-            // Assuming the current user is stored in SessionManager
             User currentUser = SessionManager.getCurrentUser();
             if (currentUser != null) {
                 articlesController.setCurrentUsername(currentUser.getUsername());
             }
-
-            // Switch to the articles scene
             Stage stage = (Stage) articlesButton.getScene().getWindow(); // Get the current stage
             stage.setScene(new Scene(root)); // Switch to the articles scene
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace(); // Handle exceptions
+            e.printStackTrace();
         }
     }
 
@@ -84,8 +60,6 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ReadingHistory.fxml")); // Path to the reading history FXML
             Parent root = loader.load();
-
-            // Switch to the reading history scene
             Stage stage = (Stage) historyButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -95,24 +69,13 @@ public class HomeController {
     }
 
 
-    // Handle button click to load the manage profile page
-    @FXML
-    public void handleManageProfileButton() {
-        System.out.println("Loading Manage Profile Page...");
-        // Add your logic here to switch to the Manage Profile page.
-    }
 
     @FXML
     public void logout() {
         try {
-            // Load the Hello.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Hello-view.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage using the logoutButton
             Stage stage = (Stage) logoutButton.getScene().getWindow();
-
-            // Set the new scene
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();
@@ -130,8 +93,6 @@ public class HomeController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("RecommendedArticle.fxml")); // Path to the reading history FXML
             Parent root = loader.load();
-
-            // Switch to the reading history scene
             Stage stage = (Stage) historyButton.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -143,14 +104,9 @@ public class HomeController {
     @FXML
     public void loadManageProfile(ActionEvent event) {
         try {
-            // Load the ManageProfile.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ManageProfile.fxml"));
             Parent root = loader.load();
-
-            // Get the current stage from the event source (the button)
             Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-
-            // Set the new scene
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.show();

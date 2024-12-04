@@ -59,8 +59,8 @@ public class ArticlesController {
         categoryComboBox.setItems(FXCollections.observableArrayList(categories)); // Populate ComboBox
         categoryComboBox.setOnAction(event -> filterArticlesByCategory()); // Set event handler
 
-        // Schedule article fetching every 10 hours
-        scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 10, TimeUnit.HOURS);
+        // Schedule article fetching every 5 hours
+        scheduler.scheduleAtFixedRate(this::fetchArticles, 0, 5, TimeUnit.HOURS);
 
         // Set event listener to load full article content when an item is selected
         articlesListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldVal, newVal) -> {
@@ -74,19 +74,20 @@ public class ArticlesController {
         loadArticlesFromCSV();  // Load articles from CSV initially
     }
 
+    // Check if a given keyword exists in the text
     private boolean containsKeyword(String text, String keyword) {
         return text.matches(".*\\b" + keyword + "\\b.*");
     }
 
     private String categorizeArticle(String title, String content) {
-        String textToCheck = (title + " " + content).toLowerCase();
+        String textToCheck = (title + " " + content).toLowerCase(); // Combine title and content for keyword checking
         int[] scores = new int[categories.length];
 
         for (int i = 0; i < categories.length; i++) {
             String[] keywordArray = keywords[i].split("\\|");
             for (String keyword : keywordArray) {
                 if (containsKeyword(textToCheck, keyword)) {
-                    scores[i]++;
+                    scores[i]++; // If keyword is found, increase score
                 }
             }
         }
@@ -94,6 +95,7 @@ public class ArticlesController {
         int maxScore = 0;
         int bestCategoryIndex = -1;
 
+        // Find the category with the highest match score
         for (int i = 0; i < scores.length; i++) {
             if (scores[i] > maxScore) {
                 maxScore = scores[i];
@@ -104,19 +106,20 @@ public class ArticlesController {
         return bestCategoryIndex != -1 ? categories[bestCategoryIndex] : "Uncategorized";
     }
 
+    // Filter articles by the selected category
     public void filterArticlesByCategory() {
         String selectedCategory = categoryComboBox.getSelectionModel().getSelectedItem();
 
         if (selectedCategory != null) {
             for (int i = 0; i < categories.length; i++) {
                 if (categories[i].equals(selectedCategory)) {
-                    filterArticlesByKeywords(keywords[i]);
+                    filterArticlesByKeywords(keywords[i]); // Filter articles based on selected category's keywords
                     break;
                 }
             }
         }
     }
-
+    // Filter articles by a set of keywords
     private void filterArticlesByKeywords(String keywords) {
         List<Article> filteredArticles = new ArrayList<>();
 
@@ -135,13 +138,12 @@ public class ArticlesController {
         updateArticlesListView(filteredArticles);
     }
 
+
     private void updateArticlesListView(List<Article> filteredArticles) {
         List<String> articleTitles = new ArrayList<>();
-
         for (Article article : filteredArticles) {
             articleTitles.add(article.getTitle());
         }
-
         articlesListView.setItems(FXCollections.observableArrayList(articleTitles));
     }
 
@@ -153,9 +155,9 @@ public class ArticlesController {
         new Thread(() -> {
             try {
                 URL url = new URL(API_URL);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // Open HTTP connection
+                conn.setRequestMethod("GET"); // Set request method to GET
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0"); // Set user-agent header
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder response = new StringBuilder();
@@ -175,9 +177,10 @@ public class ArticlesController {
         }).start();
     }
 
+    // Parse the API response and save the articles to CSV and the list
     private void parseAndSaveArticles(String jsonResponse) {
         Gson gson = new Gson();
-        JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class);
+        JsonObject jsonObject = gson.fromJson(jsonResponse, JsonObject.class); // Parse JSON response
         JsonArray jsonArticles = jsonObject.getAsJsonArray("articles");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH, true))) {  // Open in append mode
@@ -226,11 +229,11 @@ public class ArticlesController {
                 String[] parts = line.split(",", -1); // Split by comma, and allow empty entries for missing columns
 
                 if (parts.length >= 2) {
-                    String title = parts[0].trim();  // Get the title (first column)
-                    String content = parts.length > 1 ? parts[1].trim() : "Content not available";  // Get content (second column)
-                    String category = parts.length > 2 ? parts[2].trim() : "Uncategorized";  // Get category (third column, optional)
+                    String title = parts[0].trim();  // Get the title
+                    String content = parts.length > 1 ? parts[1].trim() : "Content not available";  // Get content
+                    String category = parts.length > 2 ? parts[2].trim() : "Uncategorized";  // Get category
 
-                    // Add the article to the list with its real content
+                    // Add the article to the list with its content
                     articles.add(new Article(title, content, category));
                     articleTitles.add(title);  // Add the title to the ListView
                     existingArticleTitles.add(title);  // Add the title to the set of existing articles
@@ -244,6 +247,7 @@ public class ArticlesController {
         articlesListView.setItems(FXCollections.observableArrayList(articleTitles));
     }
 
+    // Save the current article to user history
     private void saveReadingHistory(Article article) {
         if (currentUsername != null) {
             ReadingHistory.addArticle(currentUsername, article);
@@ -252,22 +256,13 @@ public class ArticlesController {
         }
     }
 
-
-
+    // Open a new window to display the full article
     private void openArticleDetailView(Article article) {
         try {
-
-
             FXMLLoader loader = new FXMLLoader(getClass().getResource("ArticleDetailView.fxml"));
             Parent root = loader.load();
-
             ArticleDetailController controller = loader.getController();
             controller.setArticle(article);
-
-
-            //controller.setArticle(new Article(article.getTitle(), article.getContent(), null)); // Only set title and content
-
-
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();
