@@ -9,22 +9,22 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.ManageProfileController">
     <children>
-        <!-- Back Button -->
+
         <Button layoutX="520.0" layoutY="423.0" onAction="#handleBack" prefHeight="37.0" prefWidth="150.0" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 14px;" text="Back" />
 
-        <!-- Current Password -->
+
         <Label layoutX="200.0" layoutY="100.0" style="-fx-font-size: 16px;" text="Current Password:" />
         <PasswordField fx:id="currentPasswordField" layoutX="380.0" layoutY="100.0" prefWidth="250.0" />
 
-        <!-- New Password -->
+
         <Label layoutX="200.0" layoutY="150.0" style="-fx-font-size: 16px;" text="New Password:" />
         <PasswordField fx:id="newPasswordField" layoutX="380.0" layoutY="150.0" prefWidth="250.0" />
 
-        <!-- Confirm New Password -->
+
         <Label layoutX="200.0" layoutY="200.0" style="-fx-font-size: 16px;" text="Confirm New Password:" />
         <PasswordField fx:id="confirmNewPasswordField" layoutX="380.0" layoutY="200.0" prefWidth="250.0" />
 
-        <!-- Preferences (Categories) -->
+
         <Label layoutX="200.0" layoutY="250.0" style="-fx-font-size: 16px;" text="Preferences:" />
         <VBox layoutX="380.0" layoutY="250.0" spacing="5.0">
             <children>
@@ -36,13 +36,13 @@
             </children>
         </VBox>
 
-        <!-- Update Button -->
+
         <Button layoutX="253.0" layoutY="423.0" onAction="#handleUpdate" prefWidth="150.0" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 16px;" text="Update" />
 
-        <!-- Error Message Label -->
+
         <Label fx:id="errorMessage" layoutX="380.0" layoutY="480.0" style="-fx-font-size: 14px;" textFill="red" />
 
-        <!-- Success Message Label -->
+
         <Label fx:id="successMessage" layoutX="380.0" layoutY="480.0" style="-fx-font-size: 14px;" textFill="green" />
     </children>
 </AnchorPane>

@@ -8,17 +8,17 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.HomeController">
    <children>
-      <!-- Welcome Label -->
+
       <Label fx:id="welcomeLabel" layoutX="60.0" layoutY="60.0" prefHeight="40.0" prefWidth="341.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Welcome!" />
 
-      <!-- Center Image -->
+
       <ImageView fx:id="infoEdgeImage" fitHeight="349.0" fitWidth="474.0" layoutX="228.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@infoedge.png" />
          </image>
       </ImageView>
 
-      <!-- User Image -->
+
       <ImageView fx:id="userImage" fitHeight="69.0" fitWidth="61.0" layoutX="581.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@user.jpg" />
@@ -27,7 +27,7 @@
 
 
 
-      <!-- Other Buttons -->
+
       <Button fx:id="articlesButton" layoutX="163.0" layoutY="505.0" onAction="#handleArticlesButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Trending Articles" />
       <Button fx:id="historyButton" layoutX="660.0" layoutY="62.0" onAction="#handleHistoryButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="View History" />
       <Button fx:id="RecommendationButton" layoutX="528.0" layoutY="505.0" onAction="#handleRecommendationButton" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" text="Personalized Articles" />

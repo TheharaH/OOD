@@ -8,15 +8,15 @@
 
 <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.RecommendedArticlesController">
 
-    <!-- Title Label -->
+
     <Label style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Personalized Articles" />
 
-    <!-- List of article titles -->
+
     <ListView fx:id="articlesListView" prefHeight="400.0" prefWidth="700.0" style="-fx-font-size: 16px;" onMouseClicked="#handleArticleClick" />
 
-    <!-- Back button with consistent styling -->
+
     <Button fx:id="backButton" onAction="#handleBackButton" text="Back" style="-fx-font-size: 16px; -fx-background-color: #172a75; -fx-text-fill: white;" />
 
-    <!-- Spacer for alignment -->
+
     <HBox alignment="CENTER" />
 </VBox>

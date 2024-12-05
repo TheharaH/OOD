@@ -11,30 +11,30 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.SignUpController">
     <children>
-        <!-- Catchy Tagline -->
+
         <Text layoutX="227.0" layoutY="58.0" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #172a75;" text="Join Us and Stay Connected!" />
 
-        <!-- VBox for Form Elements -->
+
         <VBox layoutX="160.0" layoutY="120.0" spacing="20.0">
-            <!-- Username -->
+
             <HBox spacing="120.0">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Username:" />
                 <TextField fx:id="usernameField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
             </HBox>
 
-            <!-- Password -->
+
             <HBox spacing="125.0">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Password:" />
                 <PasswordField fx:id="passwordField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
             </HBox>
 
-            <!-- Confirm Password -->
+
             <HBox spacing="60.0">
                 <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Confirm Password:" />
                 <PasswordField fx:id="confirmPasswordField" prefWidth="200.0" style="-fx-font-size: 16px; -fx-padding: 10px;" />
             </HBox>
 
-            <!-- Categories -->
+
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Categories:" />
             <HBox spacing="20.0">
                 <CheckBox fx:id="category1" style="-fx-font-size: 16px;" text="Technology" />
@@ -45,13 +45,13 @@
             </HBox>
         </VBox>
 
-        <!-- Signup Button -->
+
         <Button layoutX="300.0" layoutY="468.0" onAction="#handleSignup" prefWidth="200.0" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;" text="Sign Up" />
 
-        <!-- Error Message Label -->
+
         <Label fx:id="errorMessage" layoutX="260.0" layoutY="510.0" textFill="red" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-        <!-- Success Message Label -->
+
         <Label fx:id="successMessage" layoutX="260.0" layoutY="540.0" textFill="green" style="-fx-font-size: 14px; -fx-font-weight: bold;" />
     </children>
 </AnchorPane>

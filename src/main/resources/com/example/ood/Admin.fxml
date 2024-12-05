@@ -6,17 +6,17 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="800.0" spacing="20" style="-fx-background-color: #d0d4ed;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ood.AdminController">
-    <!-- Welcome message for the admin -->
+
     <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Welcome Admin!" />
 
-    <!-- ImageView with Image from resources folder -->
+
     <ImageView fitHeight="263.0" fitWidth="348.0" pickOnBounds="true" preserveRatio="true">
         <image>
             <Image url="@news.png" />
         </image>
     </ImageView>
 
-    <!-- Buttons -->
+
     <Button fx:id="AddButton" onAction="#goToAddArticle" prefHeight="40.0" prefWidth="700.0" text="ADD" style="-fx-background-color: #53c68c; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
     <Button fx:id="DeleteButton" onAction="#goToDeleteArticle" prefHeight="40.0" prefWidth="700.0" text="DELETE" style="-fx-background-color: #ff8080; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />
     <Button onAction="#handleBackButton" prefHeight="40.0" prefWidth="700.0" text="Back" style="-fx-background-color: #172a75; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;" />

@@ -35,7 +35,8 @@ public class ArticlesController {
     private ComboBox<String> categoryComboBox;
     private String currentUsername; // ComboBox for selecting categories
 
-    private final String API_KEY = "72f3769687af4decb26ba81130a9af2a";
+    //private final String API_KEY = "72f3769687af4decb26ba81130a9af2a";
+    private final String API_KEY = "8e354f0b437d400f99073b1fb496c4f1";
     private final String API_URL = "https://newsapi.org/v2/top-headlines?country=us&pageSize=10&apiKey=" + API_KEY;
     private final String CSV_FILE_PATH = "articles.csv";
 
